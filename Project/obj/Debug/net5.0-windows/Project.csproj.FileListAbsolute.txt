@@ -20,3 +20,5 @@ D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-
 D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\ref\Project.dll
 D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\Project.pdb
 D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\Project.genruntimeconfig.cache
+D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\View\Settings.g.cs
+D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\View\Settings.baml

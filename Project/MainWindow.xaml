@@ -119,7 +119,7 @@
             </Grid>
             <Grid x:Name="E3" Grid.Row="4" Grid.Column="2" >
             </Grid>
-            <Grid x:Name="E4" Grid.Row="4" Grid.Column="3" >
+            <Grid x:Name="E4" Grid.Row="4" Grid.Column="3" Height="30" Grid.RowSpan="2" VerticalAlignment="Top" >
             </Grid>
             <Grid x:Name="E5" Grid.Row="4" Grid.Column="4" >
             </Grid>
