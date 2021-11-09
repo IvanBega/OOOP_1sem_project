@@ -5,10 +5,10 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="450" Width="800" Loaded="MainWindow_Loaded">
     <Grid>
         <Grid HorizontalAlignment="Left" Width="300" Height="300" 
-              VerticalAlignment="Top" Margin="334,46,0,0" Name="CompGrid" ShowGridLines="True">
+              VerticalAlignment="Top" Margin="360,46,0,0" Name="EnemyGrid" ShowGridLines="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -234,9 +234,9 @@
             <Grid x:Name="J10" Grid.Row="9" Grid.Column="9"  >
             </Grid>
         </Grid>
-        <Button x:Name="btn1" Margin="670,152,76,238" RenderTransformOrigin="0.481,0.523"/>
-        <Label x:Name="lblHorizontal" Content="  1     2     3      4      5      6      7      8      9    10"
-        	HorizontalAlignment="Left" Margin="332,10,0,398" Width="304" FontSize="14"/>
+        <Button x:Name="btn1" Margin="315,369,431,21" RenderTransformOrigin="0.481,0.523"/>
+        <Label x:Name="lblHorizontal" Content="  1      2      3      4      5      6      7      8      9    10"
+        	HorizontalAlignment="Left" Margin="358,10,0,398" Width="304" FontSize="14"/>
         <Grid HorizontalAlignment="Left" Width="300" Height="300" VerticalAlignment="Top" Margin="15,45,0,0" x:Name="PlayerGrid" ShowGridLines="True">
             <Grid.RowDefinitions>
                 <RowDefinition/>

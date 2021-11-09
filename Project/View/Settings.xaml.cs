@@ -19,11 +19,11 @@ namespace Project.View
     /// </summary>
     public partial class Settings : Window
     {
-        public int BattleshipCount { get; set; }
-        public int CarrierCount { get; set; }
-        public int DestroyerCount { get; set; }
-        public int PatrolBoatCount { get; set; }
-        public int SubmarineCount { get; set; }
+        public int BattleshipCount { get; set; } = 1;
+        public int CarrierCount { get; set; } = 1;
+        public int DestroyerCount { get; set; } = 1;
+        public int PatrolBoatCount { get; set; } = 1;
+        public int SubmarineCount { get; set; } = 1;
         public Settings()
         {
             InitializeComponent();
@@ -32,8 +32,10 @@ namespace Project.View
 
         private void Next1_Click(object sender, RoutedEventArgs e)
         {
-            int sum = BattleshipCount + CarrierCount;
-            PbCount.Text = sum.ToString();
+            ShipArrangement sa = new();
+            sa.Show();
+            this.Close();
+            sa.PassShipCount(this);       
         }
     }
 }

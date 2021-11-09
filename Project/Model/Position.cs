@@ -15,5 +15,8 @@ namespace Project.Model
             X = x;
             Y = y;
         }
+        public Position()
+        {
+        }
     }
 }

@@ -5,8 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
         mc:Ignorable="d"
-        Title="Settings" Height="270" Width="339"
-        DataContext="Settings">
+        Title="Settings" Height="270" Width="339">
     <Grid ShowGridLines="true">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"></ColumnDefinition>
@@ -32,6 +31,7 @@
         <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding SubmarineCount}" FontSize="20"></TextBox>
         <TextBox Grid.Column="1" Grid.Row="4" Text="{Binding BattleshipCount}" FontSize="20"></TextBox>
         <TextBox Grid.Column="1" Grid.Row="5" Text="{Binding CarrierCount}" FontSize="20"></TextBox>
-        <Button x:Name="Next_Click" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Click="Next1_Click"></Button>
+        <Button x:Name="NextBtn_Click" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="2" Click="Next1_Click" Content="Next" FontSize="20"></Button>
+        <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Enter amount of ships" HorizontalAlignment="Center" FontSize="20"></Label>
     </Grid>
 </Window>
