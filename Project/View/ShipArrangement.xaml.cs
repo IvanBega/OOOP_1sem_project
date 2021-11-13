@@ -21,16 +21,17 @@ namespace Project.View
     /// </summary>
     public partial class ShipArrangement : Window
     {
-        public int BattleshipLeft;
+        private int BattleshipLeft;
         private int CarrierLeft;
         private int DestroyerLeft;
         private int PatrolBoatLeft;
         private int SubmarineLeft;
+        private int[] shipCount = new int[5];
         public CellState[,] Cells = new CellState[10,10];
         public ShipArrangement()
         {
             InitializeComponent();
-            this.DataContext = this;
+            DataContext = this;
         }
 
         public void PassShipCount(Settings settings)
@@ -40,6 +41,12 @@ namespace Project.View
             DestroyerLeft = settings.DestroyerCount;
             PatrolBoatLeft = settings.PatrolBoatCount;
             SubmarineLeft = settings.SubmarineCount;
+
+            shipCount[0] = settings.BattleshipCount;
+            shipCount[1] = settings.CarrierCount;
+            shipCount[2] = settings.DestroyerCount;
+            shipCount[3] = settings.PatrolBoatCount;
+            shipCount[4] = settings.SubmarineCount;
         }
         private List<Ship> RandomSetup(int[] sizes)
         {
@@ -80,10 +87,6 @@ namespace Project.View
                             }
                         }
                     }
-                    //for (int j = 0; j < size; j++)
-                    //{
-                    //    cells[index_i, index_j + j] = CellState.Occupied;
-                    //}
                 }
                 else
                 {
@@ -103,10 +106,6 @@ namespace Project.View
                             }
                         }
                     }
-                    //for (int i = 0; i < size; i++)
-                    //{
-                    //    cells[index_i + i, index_j] = CellState.Occupied;
-                    //}
                 }
                 Position pos = new(index_j, index_i);
                 switch (size)
@@ -133,11 +132,16 @@ namespace Project.View
         
         private void PlaceShipBtn_Click(object sender, RoutedEventArgs e)
        {
+            
+        }
+
+        private void ProceedBtn_Click(object sender, RoutedEventArgs e)
+        {
             this.Close();
             MainWindow wnd = (MainWindow)Application.Current.MainWindow;
             wnd.Show();
             wnd.SetPlayerShips(RandomSetup(new int[5] { 1, 2, 3, 4, 5 }));
-            wnd.SetEnemyShips(RandomSetup(new int[5] { 1, 2, 3, 4, 5}));
+            wnd.SetEnemyShips(RandomSetup(new int[5] { 1, 2, 3, 4, 5 }));
             wnd.InitGameBoard();
             wnd.Game();
         }

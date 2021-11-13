@@ -238,39 +238,67 @@
             <Grid x:Name="J10" Grid.Row="9" Grid.Column="9"  >
             </Grid>
         </Grid>
-        <Grid x:Name="ShipsLeftGrid" ShowGridLines="true" Grid.Column="1" Width="100" Height="100" Margin="119,26,110,308">
+        <Grid Grid.Column="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
+                <RowDefinition Height="5*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label HorizontalAlignment="Center" Content="Patrol boats" FontSize="8" Grid.Column="0" Grid.Row="1"></Label>
-            <Label HorizontalAlignment="Center" Content="Destroyers" FontSize="8" Grid.Column="0" Grid.Row="2"></Label>
-            <Label HorizontalAlignment="Center" Content="Submarines" FontSize="8" Grid.Column="0" Grid.Row="3"></Label>
-            <Label HorizontalAlignment="Center" Content="Submarines" FontSize="8" Grid.Column="0" Grid.Row="3"></Label>
-            <Label HorizontalAlignment="Center" Content="Battleships" FontSize="8" Grid.Column="0" Grid.Row="4"></Label>
-            <Label HorizontalAlignment="Center" Content="Carriers" FontSize="8" Grid.Column="0" Grid.Row="5"></Label>
-            <Label Grid.Column="1" Grid.Row="1" Content="{Binding PatrolBoatLeft}" FontSize="8"></Label>
-            <Label Grid.Column="1" Grid.Row="2" Content="{Binding DestroyerLeft}" FontSize="8"></Label>
-            <Label Grid.Column="1" Grid.Row="3" Content="{Binding SubmarineLeft}" FontSize="8"></Label>
-            <Label Grid.Column="1" Grid.Row="4" Content="{Binding BattleshipLeft}" FontSize="8"></Label>
-            <Label Grid.Column="1" Grid.Row="5" Content="{Binding CarrierLeft}" FontSize="8"></Label>
-            <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Ships left to place" HorizontalAlignment="Center" FontSize="8"></Label>
+            <Grid x:Name="ShipsLeftGrid" ShowGridLines="true" Grid.Column="0" Margin="90,24,10,119">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label HorizontalAlignment="Center" Content="Patrol boats" FontSize="8" Grid.Column="0" Grid.Row="1"></Label>
+                <Label HorizontalAlignment="Center" Content="Destroyers" FontSize="8" Grid.Column="0" Grid.Row="2"></Label>
+                <Label HorizontalAlignment="Center" Content="Submarines" FontSize="8" Grid.Column="0" Grid.Row="3"></Label>
+                <Label HorizontalAlignment="Center" Content="Submarines" FontSize="8" Grid.Column="0" Grid.Row="3"></Label>
+                <Label HorizontalAlignment="Center" Content="Battleships" FontSize="8" Grid.Column="0" Grid.Row="4"></Label>
+                <Label HorizontalAlignment="Center" Content="Carriers" FontSize="8" Grid.Column="0" Grid.Row="5"></Label>
+                <Label Grid.Column="1" Grid.Row="1" Content="{Binding PatrolBoatLeft}" FontSize="14"></Label>
+                <Label Grid.Column="1" Grid.Row="2" Content="{Binding DestroyerLeft}" FontSize="14"></Label>
+                <Label Grid.Column="1" Grid.Row="3" Content="{Binding SubmarineLeft}" FontSize="8"></Label>
+                <Label Grid.Column="1" Grid.Row="4" Content="{Binding BattleshipLeft}" FontSize="8"></Label>
+                <Label Grid.Column="1" Grid.Row="5" Content="{Binding CarrierLeft}" FontSize="8"></Label>
+                <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Ships left to place" HorizontalAlignment="Center" FontSize="8"></Label>
+            </Grid>
+            <Grid x:Name="MiniShipGrid" ShowGridLines="True" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+            </Grid>
+            <Button x:Name="PlaceShipBtn" Grid.Column="0" Grid.Row="2" Click="PlaceShipBtn_Click" Content="Place" FontSize="22" Height="90" Width="90"/>
+            <Button x:Name="ProceedBtn" Grid.Column="1" Grid.Row="2" Click="ProceedBtn_Click" Content="Proceed" FontSize="22" Height="90" Width="90"/>
+            <TextBox x:Name="xCoord" FontSize="20" Grid.Column="0" Grid.Row="1" Width="50" Height="50" HorizontalAlignment="Left"/>
+            <TextBox x:Name="yCoord" FontSize="20" Grid.Column="0" Grid.Row="1" Width="50" Height="50"/>
+            <ComboBox x:Name="ComboBox" Width="100" Height="30" Grid.Column="1" Grid.Row="1">
+                <TextBlock>Horizontal</TextBlock>
+                <TextBlock>Vertical</TextBlock>
+            </ComboBox>
         </Grid>
-        <Button x:Name="PlaceShipBtn" Grid.Column="1" Margin="119,176,143,197" Click="PlaceShipBtn_Click" Content="NEXT&#xD;&#xA;"/>
-        <TextBox x:Name="xCoord" FontSize="20" Grid.Column="1" Margin="10,247,280,148"/>
-        <TextBox x:Name="yCoord" FontSize="20" Grid.Column="1" Margin="84,247,208,148" />
-        <TextBox x:Name="ShipSize" FontSize="20" Grid.Column="1" Margin="139,242,155,153"/>
-        <ComboBox x:Name="ComboBox" Width="100" Height="30" Grid.Column="1" Margin="0,135,229,269">
-            <TextBlock>Horizontal</TextBlock>
-            <TextBlock>Vertical</TextBlock>
-        </ComboBox>
+       
     </Grid>
 </Window>

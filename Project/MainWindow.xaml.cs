@@ -226,7 +226,7 @@ namespace Project
             {
                 x = r.Next(0, 10);
                 y = r.Next(0, 10);
-                if (playerCells[x,y] != CellState.ShotMissed && playerCells[x,y] != CellState.ShotMissed)
+                if (playerCells[x,y] != CellState.ShotMissed && playerCells[x,y] != CellState.ShotDestroyed)
                 {
                     break;
                 }
