@@ -24,10 +24,10 @@ namespace Project
     /// </summary>
     public partial class MainWindow : Window
     {
-        private List<Ship> playerShips;
-        private List<Ship> enemyShips;
-        public CellState[,] playerCells = new CellState[10, 10];
-        public CellState[,] enemyCells = new CellState[10, 10];
+        public List<Ship> playerShips { get; set; } = new();
+        public List<Ship> enemyShips { get; set; }
+        public CellState[,] playerCells { get; set; } = new CellState[10, 10];
+        public CellState[,] enemyCells { get; set; } = new CellState[10, 10];
         private Settings s = new();
         private MoveType currentMove = MoveType.PlayerMove;
         public event Action FinishedMove;
@@ -55,7 +55,7 @@ namespace Project
             }
         }
 
-        private void DrawShip(Ship ship, Grid grid, CellState[,] cells, SolidColorBrush fill)
+        public static void DrawShip(Ship ship, Grid grid, CellState[,] cells, SolidColorBrush fill)
         {
             if (ship.Direction == Direction.Horizontal)
             {
@@ -89,14 +89,6 @@ namespace Project
                     cells[ship.Position.X, j] = CellState.Occupied;
                 }
             }
-        }
-        public void SetPlayerShips(List<Ship> ships)
-        {
-            playerShips = ships;
-        }
-        public void SetEnemyShips(List<Ship> ships)
-        {
-            enemyShips = ships;
         }
         private Ship GetShipByPos(List<Ship> ships, int x, int y)
         {
@@ -171,7 +163,6 @@ namespace Project
             }
             return false;
         }
-
         private void btn1_Click(object sender, RoutedEventArgs e)
         {
             btn1.Visibility = Visibility.Hidden;
@@ -203,7 +194,9 @@ namespace Project
             }
             else
             {
-                await Task.Delay(2000);
+                Random r = new();
+                int delay = r.Next(900, 2100);
+                await Task.Delay(delay);
                 int x, y;
                 bool shootResult;
                 PredictMove(out x, out y);

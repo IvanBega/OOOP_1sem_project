@@ -21,32 +21,23 @@ namespace Project.View
     /// </summary>
     public partial class ShipArrangement : Window
     {
-        private int BattleshipLeft;
-        private int CarrierLeft;
-        private int DestroyerLeft;
-        private int PatrolBoatLeft;
-        private int SubmarineLeft;
-        private int[] shipCount = new int[5];
-        public CellState[,] Cells = new CellState[10,10];
+        public int[] shipCount { get; set; }
+        private int index = 0;
+        private MainWindow wnd = (MainWindow)Application.Current.MainWindow;
+        private CellState[,] cells = new CellState[10,10];
         public ShipArrangement()
         {
             InitializeComponent();
-            DataContext = this;
+            //DataContext = this;
         }
 
-        public void PassShipCount(Settings settings)
+        public void SetShipCount()
         {
-            BattleshipLeft = settings.BattleshipCount;
-            CarrierLeft = settings.CarrierCount;
-            DestroyerLeft = settings.DestroyerCount;
-            PatrolBoatLeft = settings.PatrolBoatCount;
-            SubmarineLeft = settings.SubmarineCount;
-
-            shipCount[0] = settings.BattleshipCount;
-            shipCount[1] = settings.CarrierCount;
-            shipCount[2] = settings.DestroyerCount;
-            shipCount[3] = settings.PatrolBoatCount;
-            shipCount[4] = settings.SubmarineCount;
+            while (shipCount[index] == 0)
+            {
+                index++;
+            }
+            drawMiniShip(index + 1);
         }
         private List<Ship> RandomSetup(int[] sizes)
         {
@@ -108,40 +99,83 @@ namespace Project.View
                     }
                 }
                 Position pos = new(index_j, index_i);
-                switch (size)
-                {
-                    case 1:
-                        ships.Add(new PatrolBoat(pos, direction));
-                        break;
-                    case 2:
-                        ships.Add(new Destroyer(pos, direction));
-                        break;
-                    case 3:
-                        ships.Add(new Submarine(pos, direction));
-                        break;
-                    case 4:
-                        ships.Add(new Battleship(pos, direction));
-                        break;
-                    case 5:
-                        ships.Add(new Carrier(pos, direction));
-                        break;
-                }
+                ships.Add(InitShipBySize(size, pos, direction));
             }
             return ships;
         }
-        
+        private Ship InitShipBySize(int size, Position pos, Direction direction)
+        {
+            switch (size)
+            {
+                case 1:
+                    return new PatrolBoat(pos, direction);
+                case 2:
+                    return new Destroyer(pos, direction);
+                case 3:
+                    return new Submarine(pos, direction);
+                case 4:
+                    return new Battleship(pos, direction);
+                case 5:
+                    return new Carrier(pos, direction);
+                default:
+                    throw new ArgumentOutOfRangeException(String.Format("Failed to initialize ship with size {0}", size));
+            }
+        }
+        private void drawMiniShip(int length)
+        {
+            MiniShipGrid.Children.Clear();
+            for (int i = 0; i < length; i++)
+            {
+                Rectangle rect = new Rectangle { Fill = Brushes.Black };
+                Grid.SetColumn(rect, i + 1);
+                Grid.SetRow(rect, 1);
+                MiniShipGrid.Children.Add(rect);
+            }
+        }
         private void PlaceShipBtn_Click(object sender, RoutedEventArgs e)
-       {
-            
+        {
+            int x = 0, y = 0;
+            Ship ship;
+            bool flag = int.TryParse(xCoord.Text, out x) && int.TryParse(yCoord.Text, out y);
+            if (!flag)
+            {
+                MessageBox.Show("Could not recognize coordinates! Try again...");
+                return;
+            }
+            Position position = new(x, y);
+            Direction direction = Direction.Horizontal;
+            if (ComboBox.SelectedIndex == 1)
+            {
+                direction = Direction.Vertical;
+            }
+            if (index < 5 && shipCount[index] > 0)
+            {
+                ship = InitShipBySize(index + 1, position, direction);
+                wnd.playerShips.Add(ship);
+                MainWindow.DrawShip(ship, ArrangementGrid, cells, Brushes.Black);
+                shipCount[index]--;
+                if (shipCount[index] == 0)
+                {
+                    index++;
+                }
+                if (index < 5)
+                {
+                    drawMiniShip(index + 1);
+                }
+            }
+            if (index == 5)
+            {
+                PlaceShipBtn.Visibility = Visibility.Hidden;
+                ProceedBtn.Visibility = Visibility.Visible;
+            }
         }
 
         private void ProceedBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
-            MainWindow wnd = (MainWindow)Application.Current.MainWindow;
             wnd.Show();
-            wnd.SetPlayerShips(RandomSetup(new int[5] { 1, 2, 3, 4, 5 }));
-            wnd.SetEnemyShips(RandomSetup(new int[5] { 1, 2, 3, 4, 5 }));
+            //wnd.playerShips = RandomSetup(new int[5] { 1, 2, 3, 4, 5 });
+            wnd.enemyShips = RandomSetup(new int[5] { 1, 2, 3, 4, 5 });
             wnd.InitGameBoard();
             wnd.Game();
         }

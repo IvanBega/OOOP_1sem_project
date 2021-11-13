@@ -19,11 +19,6 @@ namespace Project.View
     /// </summary>
     public partial class Settings : Window
     {
-        public int BattleshipCount { get; set; } = 1;
-        public int CarrierCount { get; set; } = 1;
-        public int DestroyerCount { get; set; } = 1;
-        public int PatrolBoatCount { get; set; } = 1;
-        public int SubmarineCount { get; set; } = 1;
         public Settings()
         {
             InitializeComponent();
@@ -32,10 +27,18 @@ namespace Project.View
 
         private void Next1_Click(object sender, RoutedEventArgs e)
         {
+            // to do: input check
             ShipArrangement sa = new();
             sa.Show();
             this.Close();
-            sa.PassShipCount(this);       
+            int[] shipCount = new int[5];
+            shipCount[0] = int.Parse(PatrolboatCount.Text);
+            shipCount[1] = int.Parse(DestroyerCount.Text);
+            shipCount[2] = int.Parse(SubmarineCount.Text);
+            shipCount[3] = int.Parse(BattleshipCount.Text);
+            shipCount[4] = int.Parse(CarrierCount.Text);
+            sa.shipCount = shipCount;
+            sa.SetShipCount();
         }
     }
 }

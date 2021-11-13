@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
         mc:Ignorable="d"
-        Title="ShipArrangement" Height="450" Width="800" DataContext="ShipArrangement">
+        Title="ShipArrangement" Height="450" Width="800" DataContext="ShipArrangement" WindowStyle="None">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*"></ColumnDefinition>
