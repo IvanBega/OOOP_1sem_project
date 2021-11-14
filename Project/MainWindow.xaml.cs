@@ -17,6 +17,8 @@ using System.Windows.Shapes;
 using Project.Model;
 using Project.Model.Ships;
 using Project.View;
+using Project.ViewModel;
+
 namespace Project
 {
     /// <summary>
@@ -42,74 +44,9 @@ namespace Project
         }
         public void InitGameBoard()
         {
-            InitGrid(PlayerGrid, playerShips, playerCells);
-            InitGrid(EnemyGrid, enemyShips, enemyCells);
+            GameBoard.InitGrid(PlayerGrid, playerShips, playerCells);
+            GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells);
             FinishedMove += Game;
-        }
-
-        public void InitGrid(Grid grid, List<Ship> ships, CellState[,] cells)
-        {
-            foreach (Ship s in ships)
-            {
-                DrawShip(s, grid, cells, Brushes.Black);
-            }
-        }
-
-        public static void DrawShip(Ship ship, Grid grid, CellState[,] cells, SolidColorBrush fill)
-        {
-            if (ship.Direction == Direction.Horizontal)
-            {
-                for (int i = ship.Position.X; i < ship.Length + ship.Position.X; i++)
-                {
-                    Rectangle rect = new()
-                    {
-                        Height = 30,
-                        Width = 30,
-                        Fill = fill
-                    };
-                    Grid.SetColumn(rect, i);
-                    Grid.SetRow(rect, ship.Position.Y);
-                    grid.Children.Add(rect);
-                    cells[i, ship.Position.Y] = CellState.Occupied;
-                }
-            }
-            else
-            {
-                for (int j = ship.Position.Y; j < ship.Length + ship.Position.Y; j++)
-                {
-                    Rectangle rect = new()
-                    {
-                        Height = 30,
-                        Width = 30,
-                        Fill = fill
-                    };
-                    Grid.SetColumn(rect, ship.Position.X);
-                    Grid.SetRow(rect, j);
-                    grid.Children.Add(rect);
-                    cells[ship.Position.X, j] = CellState.Occupied;
-                }
-            }
-        }
-        private Ship GetShipByPos(List<Ship> ships, int x, int y)
-        {
-            foreach(Ship ship in ships)
-            {
-                if (ship.Direction == Direction.Horizontal)
-                {
-                    if (y == ship.Position.Y && x >= ship.Position.X && x < ship.Position.X + ship.Length)
-                    {
-                        return ship;
-                    }
-                }
-                else
-                {
-                    if (x == ship.Position.X && y >= ship.Position.Y && y < ship.Position.Y + ship.Length)
-                    {
-                        return ship;
-                    }
-                }
-            }
-            return null;
         }
         public bool Shoot(int x, int y, MoveType moveType) 
         {
@@ -140,11 +77,11 @@ namespace Project
 
             if (opponentCellState[x,y] == CellState.Occupied)
             {
-                Ship damagedShip = GetShipByPos(opponentShips, x, y);
+                Ship damagedShip = GameBoard.GetShipByPos(opponentShips, x, y);
                 damagedShip.DamageCount += 1;
                 if (damagedShip.DamageCount == damagedShip.Length)
                 {
-                    DrawShip(damagedShip, EnemyGrid, opponentCellState, Brushes.Red); // marking destroyed ship in red
+                    GameBoard.DrawShip(damagedShip, EnemyGrid, opponentCellState, Brushes.Red); // marking destroyed ship in red
                 }
                 else
                 {

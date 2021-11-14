@@ -1,5 +1,6 @@
 ﻿using Project.Model;
 using Project.Model.Ships;
+using Project.ViewModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -159,7 +160,7 @@ namespace Project.View
             {
                 ship = InitShipBySize(index + 1, position, direction);
                 wnd.playerShips.Add(ship);
-                MainWindow.DrawShip(ship, ArrangementGrid, playerCells, Brushes.Black);
+                GameBoard.DrawShip(ship, ArrangementGrid, playerCells, Brushes.Black);
                 shipCount[index]--;
                 if (shipCount[index] == 0)
                 {
@@ -215,9 +216,10 @@ namespace Project.View
             Array.Clear(playerCells, 0, playerCells.Length);
             wnd.playerShips.Clear();
             wnd.playerShips = RandomSetup();
-            wnd.InitGrid(ArrangementGrid, wnd.playerShips, playerCells);
+            GameBoard.InitGrid(ArrangementGrid, wnd.playerShips, playerCells);
 
             PlaceShipBtn.Visibility = Visibility.Hidden;
+            ProceedBtn.Visibility = Visibility.Visible;
         }
     }
 }
