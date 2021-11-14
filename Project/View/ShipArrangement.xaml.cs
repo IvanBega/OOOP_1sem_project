@@ -22,24 +22,28 @@ namespace Project.View
     public partial class ShipArrangement : Window
     {
         public int[] shipCount { get; set; }
+        private int[] shipCountCopy = new int[5];
         private int index = 0;
         private MainWindow wnd = (MainWindow)Application.Current.MainWindow;
-        private CellState[,] cells = new CellState[10,10];
+        private CellState[,] playerCells = new CellState[10,10];
         public ShipArrangement()
         {
             InitializeComponent();
+            
             //DataContext = this;
         }
 
         public void SetShipCount()
         {
+            wnd.enemyShips = RandomSetup();
+            Array.Copy(shipCount, shipCountCopy, 5);
             while (shipCount[index] == 0)
             {
                 index++;
             }
             drawMiniShip(index + 1);
         }
-        private List<Ship> RandomSetup(int[] sizes)
+        private List<Ship> RandomSetup()
         {
             int size, index_i, index_j;
             Direction direction = Direction.Horizontal;
@@ -47,59 +51,62 @@ namespace Project.View
             Random r = new Random();
             List<Ship> ships = new();
             bool flag = true;
-            for (int k = 0; k < sizes.Length; k++)
+            for (int k = 0; k < 5; k++)
             {
-                flag = true;
-                size = sizes[k];
-                if (r.Next(0, 2) == 0)
+                for (int l = 0; l < shipCount[k]; l++)
                 {
-                    direction = Direction.Vertical;
-                }
-                else
-                {
-                    direction = Direction.Horizontal;
-                }
-
-                if (direction == Direction.Horizontal)
-                {
-                    index_i = r.Next(0, 10);
-                    index_j = r.Next(0, 10 - size + 1);
-                    while (flag)
+                    flag = true;
+                    size = k + 1;
+                    if (r.Next(0, 2) == 0)
                     {
-                        flag = false;
+                        direction = Direction.Vertical;
+                    }
+                    else
+                    {
+                        direction = Direction.Horizontal;
+                    }
 
-                        for (int j = 0; j < size; j++)
+                    if (direction == Direction.Horizontal)
+                    {
+                        index_i = r.Next(0, 10);
+                        index_j = r.Next(0, 10 - size + 1);
+                        while (flag)
                         {
-                            if (cells[index_i, index_j + j] == CellState.Occupied || index_j + j >= 10)
+                            flag = false;
+
+                            for (int j = 0; j < size; j++)
                             {
-                                flag = true;
-                                index_j = r.Next(0, 10 - size + 1);
-                                break;
+                                if (cells[index_i, index_j + j] == CellState.Occupied || index_j + j >= 10)
+                                {
+                                    flag = true;
+                                    index_j = r.Next(0, 10 - size + 1);
+                                    break;
+                                }
                             }
                         }
                     }
-                }
-                else
-                {
-                    index_i = r.Next(0, 10 - size + 1);
-                    index_j = r.Next(0, 10);
-                    while (flag)
+                    else
                     {
-                        flag = false;
-
-                        for (int i = 0; i < size; i++)
+                        index_i = r.Next(0, 10 - size + 1);
+                        index_j = r.Next(0, 10);
+                        while (flag)
                         {
-                            if (cells[index_i + i, index_j] == CellState.Occupied || index_i + i >= 10)
+                            flag = false;
+
+                            for (int i = 0; i < size; i++)
                             {
-                                flag = true;
-                                index_i = r.Next(0, 10 - size + 1);
-                                break;
+                                if (cells[index_i + i, index_j] == CellState.Occupied || index_i + i >= 10)
+                                {
+                                    flag = true;
+                                    index_i = r.Next(0, 10 - size + 1);
+                                    break;
+                                }
                             }
                         }
                     }
+                    Position pos = new(index_j, index_i);
+                    ships.Add(InitShipBySize(size, pos, direction));
                 }
-                Position pos = new(index_j, index_i);
-                ships.Add(InitShipBySize(size, pos, direction));
             }
             return ships;
         }
@@ -152,7 +159,7 @@ namespace Project.View
             {
                 ship = InitShipBySize(index + 1, position, direction);
                 wnd.playerShips.Add(ship);
-                MainWindow.DrawShip(ship, ArrangementGrid, cells, Brushes.Black);
+                MainWindow.DrawShip(ship, ArrangementGrid, playerCells, Brushes.Black);
                 shipCount[index]--;
                 if (shipCount[index] == 0)
                 {
@@ -175,9 +182,42 @@ namespace Project.View
             this.Close();
             wnd.Show();
             //wnd.playerShips = RandomSetup(new int[5] { 1, 2, 3, 4, 5 });
-            wnd.enemyShips = RandomSetup(new int[5] { 1, 2, 3, 4, 5 });
+            //wnd.enemyShips = RandomSetup(new int[5] { 1, 2, 3, 4, 5 });
+            //wnd.enemyShips = RandomSetup();
             wnd.InitGameBoard();
             wnd.Game();
+        }
+
+        private void ResetShipBtn_Click(object sender, RoutedEventArgs e)
+        {
+            index = 0;
+            MiniShipGrid.Children.Clear();
+            Array.Copy(shipCountCopy, shipCount, 5);
+            Array.Clear(playerCells, 0, playerCells.Length);
+            PlaceShipBtn.Visibility = Visibility.Visible;
+            ProceedBtn.Visibility = Visibility.Hidden;
+            wnd.playerShips.Clear();
+            ArrangementGrid.Children.Clear();
+
+            while (shipCount[index] == 0)
+            {
+                index++;
+            }
+            drawMiniShip(index + 1);
+            
+        }
+
+        private void RandomizeShipBtn_Click(object sender, RoutedEventArgs e)
+        {
+            index = 5;
+            ArrangementGrid.Children.Clear();
+            Array.Copy(shipCountCopy, shipCount, 5);
+            Array.Clear(playerCells, 0, playerCells.Length);
+            wnd.playerShips.Clear();
+            wnd.playerShips = RandomSetup();
+            wnd.InitGrid(ArrangementGrid, wnd.playerShips, playerCells);
+
+            PlaceShipBtn.Visibility = Visibility.Hidden;
         }
     }
 }

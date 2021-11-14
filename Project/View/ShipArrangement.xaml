@@ -245,7 +245,8 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="5*"></RowDefinition>
-                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="3*">
+                </RowDefinition>
                 <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
             <Grid x:Name="ShipsLeftGrid" ShowGridLines="true" Grid.Column="0" Margin="90,24,10,119">
@@ -290,8 +291,19 @@
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
             </Grid>
-            <Button x:Name="PlaceShipBtn" Grid.Column="0" Grid.Row="2" Click="PlaceShipBtn_Click" Content="Place" FontSize="22" Height="90" Width="90"/>
-            <Button x:Name="ProceedBtn" Grid.Column="1" Grid.Row="2" Click="ProceedBtn_Click" Content="Proceed" FontSize="22" Height="90" Width="90"/>
+            <Grid x:Name="ButtonsGrid" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Button x:Name="PlaceShipBtn" Grid.Column="0" Click="PlaceShipBtn_Click" Content="Place" FontSize="14" Height="60" Width="60"/>
+                <Button x:Name="ProceedBtn" Grid.Column="1" Click="ProceedBtn_Click" Content="Proceed" FontSize="14" Height="60" Width="60" Visibility="Visible"/>
+                <Button x:Name="ResetShipBtn" Grid.Column="2" Click="ResetShipBtn_Click"  Content="Reset" FontSize="14" Height="60" Width="60"/>
+                <Button x:Name="RandomizeShipBtn" Grid.Column="3" Click="RandomizeShipBtn_Click"  Content="Random" FontSize="14" Height="60" Width="60"/>
+            </Grid>
+            
             <TextBox x:Name="xCoord" FontSize="20" Grid.Column="0" Grid.Row="1" Width="50" Height="50" HorizontalAlignment="Left"/>
             <TextBox x:Name="yCoord" FontSize="20" Grid.Column="0" Grid.Row="1" Width="50" Height="50"/>
             <ComboBox x:Name="ComboBox" Width="100" Height="30" Grid.Column="1" Grid.Row="1">

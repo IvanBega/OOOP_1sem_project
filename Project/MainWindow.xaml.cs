@@ -47,7 +47,7 @@ namespace Project
             FinishedMove += Game;
         }
 
-        private void InitGrid(Grid grid, List<Ship> ships, CellState[,] cells)
+        public void InitGrid(Grid grid, List<Ship> ships, CellState[,] cells)
         {
             foreach (Ship s in ships)
             {
