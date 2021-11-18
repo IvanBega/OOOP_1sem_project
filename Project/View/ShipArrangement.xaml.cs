@@ -160,7 +160,7 @@ namespace Project.View
             {
                 ship = InitShipBySize(index + 1, position, direction);
                 wnd.playerShips.Add(ship);
-                GameBoard.DrawShip(ship, ArrangementGrid, playerCells, Brushes.Black);
+                GameBoard.DrawShip(ship, ArrangementGrid, playerCells, Brushes.Black, CellState.Occupied);
                 shipCount[index]--;
                 if (shipCount[index] == 0)
                 {

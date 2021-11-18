@@ -18,5 +18,17 @@ namespace Project.Model
         public Position()
         {
         }
+        public override bool Equals(object obj)
+        {
+            if ((obj == null) || ! this.GetType().Equals(obj.GetType()))
+            {
+                return false;
+            }
+            else
+            {
+                Position pos = (Position)obj;
+                return (pos.X == X) && (pos.Y == Y);
+            }
+        }
     }
 }

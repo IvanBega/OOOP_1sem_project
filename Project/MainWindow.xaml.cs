@@ -26,13 +26,6 @@ namespace Project
     /// </summary>
     public partial class MainWindow : Window
     {
-        enum Compass
-        {
-            North,
-            West,
-            South,
-            East
-        }
         public List<Ship> playerShips { get; set; } = new();
         public List<Ship> enemyShips { get; set; }
         public CellState[,] playerCells { get; set; } = new CellState[10, 10];
@@ -41,6 +34,7 @@ namespace Project
         private MoveType currentMove = MoveType.PlayerMove;
         public event Action FinishedMove;
         private SoundPlayer sp = new SoundPlayer(@"D:\Программирование\CSharp\WPF\Sounds\shoot1.wav");
+        private AI EnemyAI;
         public MainWindow()
         {
             InitializeComponent();
@@ -54,8 +48,9 @@ namespace Project
             GameBoard.InitGrid(PlayerGrid, playerShips, playerCells);
             GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells);
             FinishedMove += Game;
+            EnemyAI = new(playerCells);
         }
-        public bool Shoot(int x, int y, MoveType moveType) 
+        public bool Shoot(Position pos, MoveType moveType) 
         {
             sp.Play();
             CellState[,] opponentCellState = playerCells;
@@ -68,7 +63,7 @@ namespace Project
                 opponentGrid = EnemyGrid;
             }
 
-            if (opponentCellState[x,y] == CellState.Free)
+            if (opponentCellState[pos.X,pos.Y] == CellState.Free)
             {
                 Rectangle rect = new()
                 {
@@ -76,19 +71,20 @@ namespace Project
                     Width = 30,
                     Fill = Brushes.Gray
                 };
-                Grid.SetColumn(rect, x);
-                Grid.SetRow(rect, y);
+                Grid.SetColumn(rect, pos.X);
+                Grid.SetRow(rect, pos.Y);
                 opponentGrid.Children.Add(rect);
-                opponentCellState[x,y] = CellState.ShotMissed;
+                opponentCellState[pos.X,pos.Y] = CellState.ShotMissed;
             }
 
-            if (opponentCellState[x,y] == CellState.Occupied)
+            if (opponentCellState[pos.X,pos.Y] == CellState.Occupied)
             {
-                Ship damagedShip = GameBoard.GetShipByPos(opponentShips, x, y);
+                Ship damagedShip = GameBoard.GetShipByPos(opponentShips, pos.X, pos.Y);
                 damagedShip.DamageCount += 1;
                 if (damagedShip.DamageCount == damagedShip.Length)
                 {
-                    GameBoard.DrawShip(damagedShip, EnemyGrid, opponentCellState, Brushes.Red); // marking destroyed ship in red
+                    // GameBoard.DrawShip(damagedShip, EnemyGrid, opponentCellState, Brushes.Red); // marking destroyed ship in red
+                    GameBoard.DrawShip(damagedShip, opponentGrid, opponentCellState, Brushes.Red, CellState.ShotDestroyed); // marking destroyed ship in red
                 }
                 else
                 {
@@ -98,11 +94,15 @@ namespace Project
                         Width = 30,
                         Fill = Brushes.Yellow
                     };
-                    Grid.SetColumn(rect, x);
-                    Grid.SetRow(rect, y);
+                    Grid.SetColumn(rect, pos.X);
+                    Grid.SetRow(rect, pos.Y);
                     opponentGrid.Children.Add(rect);
                 }
-                opponentCellState[x, y] = CellState.ShotDestroyed;
+                opponentCellState[pos.X, pos.Y] = CellState.ShotDestroyed;
+                if (moveType == MoveType.EnemyMove)
+                {
+                    EnemyAI.AddAdjacentToQueue(pos);
+                }
                 return true;
             }
             return false;
@@ -110,8 +110,15 @@ namespace Project
         private void btn1_Click(object sender, RoutedEventArgs e)
         {
             btn1.Visibility = Visibility.Hidden;
-            int x = int.Parse(xPosBox.Text);
-            int y = int.Parse(yPosBox.Text);
+            int x = 0, y = 0;
+            bool result = true;
+            result = int.TryParse(xPosBox.Text, out x) && int.TryParse(yPosBox.Text, out y);
+            if (!result || x < 0 || y < 0 || x > 10 || y > 10)
+            {
+                MessageBox.Show("Incorrect input coordinates!");
+                btn1.Visibility = Visibility.Visible;
+                return;
+            }
             bool shootResult;
             if (enemyCells[x-1,y-1] == CellState.ShotMissed || enemyCells[x-1,y-1] == CellState.ShotDestroyed)
             {
@@ -119,7 +126,7 @@ namespace Project
                 btn1.Visibility = Visibility.Visible;
                 return;
             }
-            shootResult = Shoot(x - 1, y - 1, MoveType.PlayerMove);
+            shootResult = Shoot(new Position(x - 1, y - 1), MoveType.PlayerMove);
             if (shootResult)
             {
                 currentMove = MoveType.PlayerMove;
@@ -141,10 +148,14 @@ namespace Project
                 Random r = new();
                 int delay = r.Next(900, 2100);
                 await Task.Delay(delay);
-                int x, y;
                 bool shootResult;
-                PredictMove(out x, out y);
-                shootResult = Shoot(x, y, MoveType.EnemyMove);
+                Position pos;
+                //pos = EnemyAI.RandomFreePosition();
+                pos = EnemyAI.PredictMove();
+                shootResult = Shoot(pos, MoveType.EnemyMove);
+                //botX.Content = pos.X;
+                botX.Content = EnemyAI.GetFreePosCount();
+                botY.Content = pos.Y;
                 if (shootResult)
                 {
                     currentMove = MoveType.EnemyMove;
@@ -156,19 +167,19 @@ namespace Project
                 FinishedMove?.Invoke();
             }
         }
-        private void PredictMove(out int x, out int y)
-        {
-            Random r = new Random();
-            while (true)
-            {
-                x = r.Next(0, 10);
-                y = r.Next(0, 10);
-                if (playerCells[x,y] != CellState.ShotMissed && playerCells[x,y] != CellState.ShotDestroyed)
-                {
-                    break;
-                }
-            }
-        }
+        //private void PredictMove(out int x, out int y)
+        //{
+        //    Random r = new Random();
+        //    while (true)
+        //    {
+        //        x = r.Next(0, 10);
+        //        y = r.Next(0, 10);
+        //        if (playerCells[x, y] != CellState.ShotMissed && playerCells[x, y] != CellState.ShotDestroyed)
+        //        {
+        //            break;
+        //        }
+        //    }
+        //}
         private void PlaySound()
         {
             sp.Play();
