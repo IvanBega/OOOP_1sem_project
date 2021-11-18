@@ -26,6 +26,13 @@ namespace Project
     /// </summary>
     public partial class MainWindow : Window
     {
+        enum Compass
+        {
+            North,
+            West,
+            South,
+            East
+        }
         public List<Ship> playerShips { get; set; } = new();
         public List<Ship> enemyShips { get; set; }
         public CellState[,] playerCells { get; set; } = new CellState[10, 10];
@@ -165,6 +172,11 @@ namespace Project
         private void PlaySound()
         {
             sp.Play();
+        }
+        
+        private bool ShotCell(CellState[,] cells, int x, int y)
+        {
+            return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotMissed;
         }
     }
 
