@@ -24,3 +24,5 @@ D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-
 D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\View\Settings.baml
 D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\View\ShipArrangement.g.cs
 D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\View\ShipArrangement.baml
+D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\View\Menu.g.cs
+D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\View\Menu.baml

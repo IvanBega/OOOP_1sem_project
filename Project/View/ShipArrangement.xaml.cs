@@ -30,12 +30,15 @@ namespace Project.View
         public ShipArrangement()
         {
             InitializeComponent();
-            
-            //DataContext = this;
+            shipCount = wnd.shipCount;
         }
 
         public void SetShipCount()
         {
+            if (shipCount == null || shipCount.Length == 0)
+            {
+                shipCount = new int[5] { 1, 0, 0, 0, 0 };
+            }
             wnd.enemyShips = RandomSetup();
             Array.Copy(shipCount, shipCountCopy, 5);
             while (shipCount[index] == 0)
@@ -184,7 +187,6 @@ namespace Project.View
                 MiniShipGrid.Children.Clear();
             }
         }
-
         private void ProceedBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -192,7 +194,6 @@ namespace Project.View
             wnd.InitGameBoard();
             wnd.Game();
         }
-
         private void ResetShipBtn_Click(object sender, RoutedEventArgs e)
         {
             index = 0;
@@ -211,7 +212,6 @@ namespace Project.View
             drawMiniShip(index + 1);
             
         }
-
         private void RandomizeShipBtn_Click(object sender, RoutedEventArgs e)
         {
             index = 5;

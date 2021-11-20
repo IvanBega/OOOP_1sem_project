@@ -26,21 +26,25 @@ namespace Project
     /// </summary>
     public partial class MainWindow : Window
     {
+        public int[] shipCount { get; set; }
         public List<Ship> playerShips { get; set; } = new();
         public List<Ship> enemyShips { get; set; }
         public CellState[,] playerCells { get; set; } = new CellState[10, 10];
         public CellState[,] enemyCells { get; set; } = new CellState[10, 10];
-        private Settings s = new();
+        public Settings settings;
+        private MenuWindow menu;
         private MoveType currentMove = MoveType.PlayerMove;
         public event Action FinishedMove;
-        //private SoundPlayer sp = new SoundPlayer(@"D:\Программирование\CSharp\WPF\Sounds\shoot1.wav");
         private AI EnemyAI;
         public MainWindow()
         {
             InitializeComponent();
             Application.Current.MainWindow = this;
+            settings = new();
+            menu = new();
             Hide();
-            s.Show();
+            menu.Show();
+            //s.Show();
         }
         public void InitGameBoard()
         {
@@ -82,7 +86,6 @@ namespace Project
                 damagedShip.DamageCount += 1;
                 if (damagedShip.DamageCount == damagedShip.Length)
                 {
-                    // GameBoard.DrawShip(damagedShip, EnemyGrid, opponentCellState, Brushes.Red); // marking destroyed ship in red
                     GameBoard.DrawShip(damagedShip, opponentGrid, opponentCellState, Brushes.Red, CellState.ShotDestroyed); // marking destroyed ship in red
                 }
                 else
@@ -165,21 +168,7 @@ namespace Project
                 }
                 FinishedMove?.Invoke();
             }
-        }
-        //private void PredictMove(out int x, out int y)
-        //{
-        //    Random r = new Random();
-        //    while (true)
-        //    {
-        //        x = r.Next(0, 10);
-        //        y = r.Next(0, 10);
-        //        if (playerCells[x, y] != CellState.ShotMissed && playerCells[x, y] != CellState.ShotDestroyed)
-        //        {
-        //            break;
-        //        }
-        //    }
-        //}
-        
+        }    
         private bool ShotCell(CellState[,] cells, int x, int y)
         {
             return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotMissed;

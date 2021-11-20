@@ -19,6 +19,7 @@ namespace Project.View
     /// </summary>
     public partial class Settings : Window
     {
+        private MainWindow wnd = (MainWindow)Application.Current.MainWindow;
         public Settings()
         {
             InitializeComponent();
@@ -28,8 +29,8 @@ namespace Project.View
         private void Next1_Click(object sender, RoutedEventArgs e)
         {
             // to do: input check
-            ShipArrangement sa = new();
-            sa.Show();
+            //ShipArrangement sa = new();
+            //sa.Show();
             this.Close();
             int[] shipCount = new int[5];
             shipCount[0] = int.Parse(PatrolboatCount.Text);
@@ -37,8 +38,10 @@ namespace Project.View
             shipCount[2] = int.Parse(SubmarineCount.Text);
             shipCount[3] = int.Parse(BattleshipCount.Text);
             shipCount[4] = int.Parse(CarrierCount.Text);
-            sa.shipCount = shipCount;
-            sa.SetShipCount();
+            wnd.shipCount = shipCount;
+            this.Close();
+            //sa.shipCount = shipCount;
+            //sa.SetShipCount();
         }
     }
 }
