@@ -158,6 +158,7 @@ namespace Project.View
             }
             if (!GameBoard.CanPlaceShip(playerCells, x - 1, y - 1, index + 1, direction))
             {
+                SoundEffect.PlayErrorSound();
                 MessageBox.Show("Can't place ship here!");
                 return;
             }

@@ -33,13 +33,12 @@ namespace Project
         private Settings s = new();
         private MoveType currentMove = MoveType.PlayerMove;
         public event Action FinishedMove;
-        private SoundPlayer sp = new SoundPlayer(@"D:\Программирование\CSharp\WPF\Sounds\shoot1.wav");
+        //private SoundPlayer sp = new SoundPlayer(@"D:\Программирование\CSharp\WPF\Sounds\shoot1.wav");
         private AI EnemyAI;
         public MainWindow()
         {
             InitializeComponent();
             Application.Current.MainWindow = this;
-            sp.Load();
             Hide();
             s.Show();
         }
@@ -52,7 +51,7 @@ namespace Project
         }
         public bool Shoot(Position pos, MoveType moveType) 
         {
-            sp.Play();
+            SoundEffect.PlayShootSound();
             CellState[,] opponentCellState = playerCells;
             List<Ship> opponentShips = playerShips;
             Grid opponentGrid = PlayerGrid;
@@ -180,10 +179,6 @@ namespace Project
         //        }
         //    }
         //}
-        private void PlaySound()
-        {
-            sp.Play();
-        }
         
         private bool ShotCell(CellState[,] cells, int x, int y)
         {
