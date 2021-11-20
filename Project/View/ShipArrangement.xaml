@@ -49,32 +49,6 @@
                 </RowDefinition>
                 <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid x:Name="ShipsLeftGrid" ShowGridLines="true" Grid.Column="0" Margin="90,24,10,119">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="4*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Label HorizontalAlignment="Center" Content="Patrol boats" FontSize="8" Grid.Column="0" Grid.Row="1"></Label>
-                <Label HorizontalAlignment="Center" Content="Destroyers" FontSize="8" Grid.Column="0" Grid.Row="2"></Label>
-                <Label HorizontalAlignment="Center" Content="Submarines" FontSize="8" Grid.Column="0" Grid.Row="3"></Label>
-                <Label HorizontalAlignment="Center" Content="Submarines" FontSize="8" Grid.Column="0" Grid.Row="3"></Label>
-                <Label HorizontalAlignment="Center" Content="Battleships" FontSize="8" Grid.Column="0" Grid.Row="4"></Label>
-                <Label HorizontalAlignment="Center" Content="Carriers" FontSize="8" Grid.Column="0" Grid.Row="5"></Label>
-                <Label Grid.Column="1" Grid.Row="1" Content="{Binding PatrolBoatLeft}" FontSize="14"></Label>
-                <Label Grid.Column="1" Grid.Row="2" Content="{Binding DestroyerLeft}" FontSize="14"></Label>
-                <Label Grid.Column="1" Grid.Row="3" Content="{Binding SubmarineLeft}" FontSize="8"></Label>
-                <Label Grid.Column="1" Grid.Row="4" Content="{Binding BattleshipLeft}" FontSize="8"></Label>
-                <Label Grid.Column="1" Grid.Row="5" Content="{Binding CarrierLeft}" FontSize="8"></Label>
-                <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Content="Ships left to place" HorizontalAlignment="Center" FontSize="8"></Label>
-            </Grid>
             <Grid x:Name="MiniShipGrid" ShowGridLines="True" Grid.Column="0" Grid.ColumnSpan="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
@@ -99,11 +73,11 @@
                     <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Button x:Name="PlaceShipBtn" Grid.Column="0" Click="PlaceShipBtn_Click" Content="Place" FontSize="14" Height="60" Width="60"/>
-                <Button x:Name="ProceedBtn" Grid.Column="1" Click="ProceedBtn_Click" Content="Proceed" FontSize="14" Height="60" Width="60" Visibility="Visible"/>
+                <Button x:Name="ProceedBtn" Grid.Column="1" Click="ProceedBtn_Click" Content="Proceed" FontSize="14" Height="60" Width="60" Visibility="Hidden"/>
                 <Button x:Name="ResetShipBtn" Grid.Column="2" Click="ResetShipBtn_Click"  Content="Reset" FontSize="14" Height="60" Width="60"/>
                 <Button x:Name="RandomizeShipBtn" Grid.Column="3" Click="RandomizeShipBtn_Click"  Content="Random" FontSize="14" Height="60" Width="60"/>
             </Grid>
-            
+
             <TextBox x:Name="xCoord" FontSize="20" Grid.Column="0" Grid.Row="1" Width="50" Height="50" HorizontalAlignment="Left"/>
             <TextBox x:Name="yCoord" FontSize="20" Grid.Column="0" Grid.Row="1" Width="50" Height="50"/>
             <ComboBox x:Name="ComboBox" Width="100" Height="30" Grid.Column="1" Grid.Row="1">
@@ -111,6 +85,18 @@
                 <TextBlock>Vertical</TextBlock>
             </ComboBox>
         </Grid>
-       
+        <Label x:Name="lblHorizontal" Content="  1      2      3      4      5      6      7      8      9    10"
+        	HorizontalAlignment="Left" Margin="81,41,0,359" Width="304" FontSize="14"/>
+        <TextBlock Text="1" FontSize="14" Margin="52,77,330,328"></TextBlock>
+        <TextBlock Text="2" FontSize="14" Margin="52,107,330,298"></TextBlock>
+        <TextBlock Text="3" FontSize="14" Margin="52,137,330,268"></TextBlock>
+        <TextBlock Text="4" FontSize="14" Margin="52,167,330,238"></TextBlock>
+        <TextBlock Text="5" FontSize="14" Margin="52,197,330,208"></TextBlock>
+        <TextBlock Text="6" FontSize="14" Margin="52,227,330,178"></TextBlock>
+        <TextBlock Text="7" FontSize="14" Margin="52,257,330,148"></TextBlock>
+        <TextBlock Text="8" FontSize="14" Margin="52,287,330,118"></TextBlock>
+        <TextBlock Text="9" FontSize="14" Margin="52,317,330,88"></TextBlock>
+        <TextBlock Text="10" FontSize="14" Margin="52,347,330,58"></TextBlock>
     </Grid>
+
 </Window>

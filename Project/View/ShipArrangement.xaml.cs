@@ -150,11 +150,16 @@ namespace Project.View
                 MessageBox.Show("Could not recognize coordinates! Try again...");
                 return;
             }
-            Position position = new(x, y);
+            Position position = new(x - 1, y - 1);
             Direction direction = Direction.Horizontal;
             if (ComboBox.SelectedIndex == 1)
             {
                 direction = Direction.Vertical;
+            }
+            if (!GameBoard.CanPlaceShip(playerCells, x - 1, y - 1, index + 1, direction))
+            {
+                MessageBox.Show("Can't place ship here!");
+                return;
             }
             if (index < 5 && shipCount[index] > 0)
             {
@@ -162,7 +167,7 @@ namespace Project.View
                 wnd.playerShips.Add(ship);
                 GameBoard.DrawShip(ship, ArrangementGrid, playerCells, Brushes.Black, CellState.Occupied);
                 shipCount[index]--;
-                if (shipCount[index] == 0)
+                while (index < 5 && shipCount[index] == 0)
                 {
                     index++;
                 }
@@ -175,6 +180,7 @@ namespace Project.View
             {
                 PlaceShipBtn.Visibility = Visibility.Hidden;
                 ProceedBtn.Visibility = Visibility.Visible;
+                MiniShipGrid.Children.Clear();
             }
         }
 
@@ -182,9 +188,6 @@ namespace Project.View
         {
             this.Close();
             wnd.Show();
-            //wnd.playerShips = RandomSetup(new int[5] { 1, 2, 3, 4, 5 });
-            //wnd.enemyShips = RandomSetup(new int[5] { 1, 2, 3, 4, 5 });
-            //wnd.enemyShips = RandomSetup();
             wnd.InitGameBoard();
             wnd.Game();
         }
