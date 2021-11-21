@@ -25,13 +25,12 @@ namespace Project.View
             InitializeComponent();
             this.DataContext = this;
         }
-
         private void Next1_Click(object sender, RoutedEventArgs e)
         {
             // to do: input check
             //ShipArrangement sa = new();
             //sa.Show();
-            this.Close();
+            //this.Close();
             int[] shipCount = new int[5];
             shipCount[0] = int.Parse(PatrolboatCount.Text);
             shipCount[1] = int.Parse(DestroyerCount.Text);
@@ -39,7 +38,8 @@ namespace Project.View
             shipCount[3] = int.Parse(BattleshipCount.Text);
             shipCount[4] = int.Parse(CarrierCount.Text);
             wnd.shipCount = shipCount;
-            this.Close();
+            wnd.SaveAsXmlFormat(shipCount, "ShipCount.xml");
+            this.Hide();
             //sa.shipCount = shipCount;
             //sa.SetShipCount();
         }

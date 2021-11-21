@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml.Serialization;
 using Project.Model;
 using Project.Model.Ships;
 using Project.View;
@@ -172,6 +174,31 @@ namespace Project
         private bool ShotCell(CellState[,] cells, int x, int y)
         {
             return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotMissed;
+        }
+
+        public void SaveAsXmlFormat<T>(T list, string fileName)
+        {
+            XmlSerializer xmlFormat = new XmlSerializer(typeof(T));
+            using (Stream fStream = new FileStream(fileName,
+            FileMode.Create, FileAccess.Write, FileShare.None))
+            {
+                xmlFormat.Serialize(fStream, list);
+            }
+        }
+        private T ReadAsXmlFormat<T>(string fileName)
+        {
+            XmlSerializer xmlFormat = new XmlSerializer(typeof(T));
+            using (Stream fStream = new FileStream(fileName, FileMode.Open))
+            {
+                T obj = default;
+                obj = (T)xmlFormat.Deserialize(fStream);
+                return obj;
+            }
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            settings.Close();
         }
     }
 
