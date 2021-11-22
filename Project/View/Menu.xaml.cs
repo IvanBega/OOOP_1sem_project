@@ -37,5 +37,16 @@ namespace Project.View
         {
             wnd.settings.Show();
         }
+
+        private void ExitBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+            wnd.Close();
+        }
+
+        private void ContinueBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

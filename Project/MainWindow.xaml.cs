@@ -175,27 +175,6 @@ namespace Project
         {
             return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotMissed;
         }
-
-        public void SaveAsXmlFormat<T>(T list, string fileName)
-        {
-            XmlSerializer xmlFormat = new XmlSerializer(typeof(T));
-            using (Stream fStream = new FileStream(fileName,
-            FileMode.Create, FileAccess.Write, FileShare.None))
-            {
-                xmlFormat.Serialize(fStream, list);
-            }
-        }
-        private T ReadAsXmlFormat<T>(string fileName)
-        {
-            XmlSerializer xmlFormat = new XmlSerializer(typeof(T));
-            using (Stream fStream = new FileStream(fileName, FileMode.Open))
-            {
-                T obj = default;
-                obj = (T)xmlFormat.Deserialize(fStream);
-                return obj;
-            }
-        }
-
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             settings.Close();

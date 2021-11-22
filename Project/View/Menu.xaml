@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
         mc:Ignorable="d"
-        Title="Menu" Height="450" Width="800">
+        Title="Menu" Height="450" Width="800" WindowStyle="None">
     <Grid>
         <Grid.ColumnDefinitions>
             
@@ -17,6 +17,8 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Button x:Name="NewGameBtn" Grid.Row="0" Width="200" Height="50" Content="New Game" Click="NewGameBtn_Click" FontSize="24"></Button>
-        <Button x:Name="SettingsBtn" Grid.Row="1" Width="200" Height="50" Content="Settings" Click="SettingsBtn_Click" FontSize="24"></Button>
+        <Button x:Name="ContinueBtn" Grid.Row="1" Width="200" Height="50" Content="Continue" Click="ContinueBtn_Click" IsEnabled="False" FontSize="24"></Button>
+        <Button x:Name="SettingsBtn" Grid.Row="2" Width="200" Height="50" Content="Settings" Click="SettingsBtn_Click" FontSize="24"></Button>
+        <Button x:Name="ExitBtn" Grid.Row="3" Width="200" Height="50" Content="Exit" Click="ExitBtn_Click"  FontSize="24"></Button>
     </Grid>
 </Window>
