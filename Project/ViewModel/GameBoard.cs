@@ -106,5 +106,39 @@ namespace Project.ViewModel
             row = (int)(p.Y - gridPos.Y) / 30;
             column = (int)(p.X - gridPos.X) / 30;
         }
+        public static void DrawCellsOnGrid(Grid grid, CellState[,] cells)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    switch(cells[i,j])
+                    {
+                        case CellState.ShotMissed:
+                            Rectangle rect1 = new()
+                            {
+                                Height = 30,
+                                Width = 30,
+                                Fill = Brushes.Gray
+                            };
+                            Grid.SetColumn(rect1, i);
+                            Grid.SetRow(rect1, j);
+                            grid.Children.Add(rect1);
+                            break;
+                        case CellState.ShotDestroyed:
+                            Rectangle rect = new()
+                            {
+                                Height = 30,
+                                Width = 30,
+                                Fill = Brushes.Yellow
+                            };
+                            Grid.SetColumn(rect, i);
+                            Grid.SetRow(rect, j);
+                            grid.Children.Add(rect);
+                            break;
+                    }
+                }
+            }
+        }
     }
 }

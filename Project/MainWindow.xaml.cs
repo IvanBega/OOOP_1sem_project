@@ -39,6 +39,24 @@ namespace Project
         public event Action FinishedMove;
         private AI EnemyAI;
         private Point enemyGridPos = new Point(420,40);
+
+        public void RestoreGameState()
+        {
+            playerCells = Serializer.ReadAsJsonFormat<CellState[,]>("playerCells.json");
+            enemyCells = Serializer.ReadAsJsonFormat<CellState[,]>("enemyCells.json");
+            playerShips = Serializer.ReadAsJsonFormat<List<Ship>>("playerShips.json");
+            enemyShips = Serializer.ReadAsJsonFormat<List<Ship>>("enemyShips.json");
+            currentMove = Serializer.ReadAsJsonFormat<MoveType>("currentMove.json");
+
+            GameBoard.InitGrid(PlayerGrid, playerShips, playerCells);
+            GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells);
+            GameBoard.DrawCellsOnGrid(PlayerGrid, playerCells);
+            GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells);
+
+            EnemyAI = new AI(playerCells);
+            this.Show();
+        }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -179,8 +197,15 @@ namespace Project
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             settings.Close();
+            Serializer.SaveAsJsonFormat<List<Ship>>(playerShips, "playerShips.json");
+            Serializer.SaveAsJsonFormat <List<Ship>>(enemyShips, "enemyShips.json");
+            Serializer.SaveAsJsonFormat<CellState[,]>(playerCells, "playerCells.json");
+            Serializer.SaveAsJsonFormat<CellState[,]>(enemyCells, "enemyCells.json");
+            Serializer.SaveAsJsonFormat<MoveType>(currentMove, "currentMove.json");
+            //Serializer.SaveAsJsonFormat<List<Ship>>(playerShips, "playerShips.json");
+            //Serializer.SaveAdList<Ship>(enemyShips, "enemyShips.json");
+            
         }
-
         private async void EnemyAttack()
         {
             bool shootResult = true;

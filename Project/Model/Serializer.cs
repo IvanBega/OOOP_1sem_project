@@ -30,23 +30,45 @@ namespace Project.Model
         //        return obj;
         //    }
         //}
-        public static void SaveAsXmlFormat<T>(T list, string fileName)
+        public static void SaveAsJsonFormat<T>(T list, string fileName)
         {
             using  (StreamWriter sw = File.CreateText(fileName))
             {
-                JsonSerializer serializer = new();
+                Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
+                serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());
+                serializer.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+                serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
+                serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
+
                 serializer.Serialize(sw, list);
             }
         }
-        public static T ReadAsXmlFormat<T>(string fileName)
+        public static T ReadAsJsonFormat<T>(string fileName)
         {
-            T result = default;
-            using (StreamReader sr = File.OpenText(fileName))
+            //T result = default;
+            //using (StreamReader sr = File.OpenText(fileName))
+            //{
+            //    string json = sr.ReadToEnd();
+            //    JsonSerializer serializer = new();
+            //    //result = (T)serializer.Deserialize(sr, typeof(T));
+            //    result = JsonConvert.DeserializeObject<T>(json);
+            //}
+            //return result;
+            T obj = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(File.ReadAllText(fileName), new Newtonsoft.Json.JsonSerializerSettings
+            {
+                TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto,
+                NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore,
+            });
+            return obj;
+        }
+
+        public static void SaveAdList<T>(List<T> list, string fileName)
+        {
+            using (StreamWriter sr = File.CreateText(fileName))
             {
                 JsonSerializer serializer = new();
-                result = (T)serializer.Deserialize(sr, typeof(T));
+                serializer.Serialize(sr, typeof(List<T>));
             }
-            return result;
         }
     }
 }

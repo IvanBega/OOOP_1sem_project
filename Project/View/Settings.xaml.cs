@@ -29,7 +29,7 @@ namespace Project.View
             this.DataContext = this;
             if (File.Exists("ShipCount.xml"))
             {
-                shipCount = Serializer.ReadAsXmlFormat <int[]> ("ShipCount.json");
+                shipCount = Serializer.ReadAsJsonFormat <int[]> ("ShipCount.json");
                 PatrolboatCount.Text = shipCount[0].ToString();
                 DestroyerCount.Text = shipCount[1].ToString();
                 SubmarineCount.Text = shipCount[2].ToString();
@@ -53,7 +53,7 @@ namespace Project.View
             shipCount[3] = int.Parse(BattleshipCount.Text);
             shipCount[4] = int.Parse(CarrierCount.Text);
             wnd.shipCount = shipCount;
-            Serializer.SaveAsXmlFormat(shipCount, "ShipCount.json");
+            Serializer.SaveAsJsonFormat(shipCount, "ShipCount.json");
             this.Hide();
             //sa.shipCount = shipCount;
             //sa.SetShipCount();

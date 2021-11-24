@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,10 @@ namespace Project.View
         public MenuWindow()
         {
             InitializeComponent();
+            if (File.Exists("playerCells.json") && File.Exists("enemyCells.json") && File.Exists("currentMove.json"))
+            {
+                ContinueBtn.IsEnabled = true;
+            }
         }
 
         private void NewGameBtn_Click(object sender, RoutedEventArgs e)
@@ -46,7 +51,8 @@ namespace Project.View
 
         private void ContinueBtn_Click(object sender, RoutedEventArgs e)
         {
-
+            wnd.RestoreGameState();
+            this.Close();
         }
     }
 }
