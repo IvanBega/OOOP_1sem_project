@@ -26,3 +26,5 @@ D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-
 D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\View\ShipArrangement.baml
 D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\View\Menu.g.cs
 D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\View\Menu.baml
+D:\Программирование\CSharp\WPF\Project\Project\bin\Debug\net5.0-windows\Newtonsoft.Json.dll
+D:\Программирование\CSharp\WPF\Project\Project\obj\Debug\net5.0-windows\Project.csproj.CopyComplete

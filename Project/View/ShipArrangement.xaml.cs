@@ -27,12 +27,12 @@ namespace Project.View
         private int index = 0;
         private MainWindow wnd = (MainWindow)Application.Current.MainWindow;
         private CellState[,] playerCells = new CellState[10,10];
+        private Point gridPos = new(80,60);
         public ShipArrangement()
         {
             InitializeComponent();
             shipCount = wnd.shipCount;
         }
-
         public void SetShipCount()
         {
             if (shipCount == null || shipCount.Length == 0)
@@ -187,6 +187,43 @@ namespace Project.View
                 MiniShipGrid.Children.Clear();
             }
         }
+        private void PlaceShip(int x, int y)
+        {
+            Ship ship;
+            Position position = new(x, y);
+            Direction direction = Direction.Horizontal;
+            if (ComboBox.SelectedIndex == 1)
+            {
+                direction = Direction.Vertical;
+            }
+            if (!GameBoard.CanPlaceShip(playerCells, x, y, index + 1, direction))
+            {
+                SoundEffect.PlayErrorSound();
+                MessageBox.Show("Can't place ship here!");
+                return;
+            }
+            if (index < 5 && shipCount[index] > 0)
+            {
+                ship = InitShipBySize(index + 1, position, direction);
+                wnd.playerShips.Add(ship);
+                GameBoard.DrawShip(ship, ArrangementGrid, playerCells, Brushes.Black, CellState.Occupied);
+                shipCount[index]--;
+                while (index < 5 && shipCount[index] == 0)
+                {
+                    index++;
+                }
+                if (index < 5)
+                {
+                    drawMiniShip(index + 1);
+                }
+            }
+            if (index == 5)
+            {
+                PlaceShipBtn.Visibility = Visibility.Hidden;
+                ProceedBtn.Visibility = Visibility.Visible;
+                MiniShipGrid.Children.Clear();
+            }
+        }
         private void ProceedBtn_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
@@ -224,6 +261,21 @@ namespace Project.View
 
             PlaceShipBtn.Visibility = Visibility.Hidden;
             ProceedBtn.Visibility = Visibility.Visible;
+        }
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Point pos = e.GetPosition(this);
+            int row, column;
+            if (pos.X > gridPos.X && pos.X < gridPos.X + 300 && pos.Y > gridPos.Y && pos.Y < gridPos.Y + 300)
+            {
+                GetPosByClick(pos, out row, out column);
+                PlaceShip(column, row);
+            }         
+        }
+        private void GetPosByClick(Point p, out int row, out int column)
+        {
+            row = (int) (p.Y - gridPos.Y) / 30;
+            column = (int)(p.X - gridPos.X) / 30;
         }
     }
 }

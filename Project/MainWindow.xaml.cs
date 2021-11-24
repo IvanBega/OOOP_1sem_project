@@ -38,6 +38,7 @@ namespace Project
         private MoveType currentMove = MoveType.PlayerMove;
         public event Action FinishedMove;
         private AI EnemyAI;
+        private Point enemyGridPos = new Point(420,40);
         public MainWindow()
         {
             InitializeComponent();
@@ -178,6 +179,46 @@ namespace Project
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             settings.Close();
+        }
+
+        private async void EnemyAttack()
+        {
+            bool shootResult = true;
+            while (shootResult)
+            {
+                Random r = new();
+                int delay = r.Next(900, 2100);
+                await Task.Delay(delay);
+                Position pos = EnemyAI.PredictMove();
+                shootResult = Shoot(pos, MoveType.EnemyMove);
+            }
+            currentMove = MoveType.PlayerMove;
+        }
+        private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (currentMove == MoveType.PlayerMove)
+            {
+                Point pos = e.GetPosition(this);
+                int row, column;
+                bool shootResult;
+                if (pos.X > enemyGridPos.X && pos.X < enemyGridPos.X + 300 && pos.Y > enemyGridPos.Y && pos.Y < enemyGridPos.Y + 300)
+                {
+                    GameBoard.GetPosByClick(enemyGridPos, pos, out row, out column);
+
+                    if (enemyCells[column, row] == CellState.ShotMissed || enemyCells[column, row] == CellState.ShotDestroyed)
+                    {
+                        MessageBox.Show("You've already shot this position! Try again...");
+                        btn1.Visibility = Visibility.Visible;
+                        return;
+                    }
+                    shootResult = Shoot(new Position(column, row), MoveType.PlayerMove);
+                    if (!shootResult)
+                    {
+                        currentMove = MoveType.EnemyMove;
+                        EnemyAttack();
+                    }
+                }
+            }
         }
     }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,24 +11,42 @@ namespace Project.Model
 {
     public static class Serializer
     {
+        //public static void SaveAsXmlFormat<T>(T list, string fileName)
+        //{
+        //    XmlSerializer xmlFormat = new XmlSerializer(typeof(T));
+        //    using (Stream fStream = new FileStream(fileName,
+        //    FileMode.Create, FileAccess.Write, FileShare.None))
+        //    {
+        //        xmlFormat.Serialize(fStream, list);
+        //    }
+        //}
+        //public static T ReadAsXmlFormat<T>(string fileName)
+        //{
+        //    XmlSerializer xmlFormat = new XmlSerializer(typeof(T));
+        //    using (Stream fStream = new FileStream(fileName, FileMode.Open))
+        //    {
+        //        T obj = default;
+        //        obj = (T)xmlFormat.Deserialize(fStream);
+        //        return obj;
+        //    }
+        //}
         public static void SaveAsXmlFormat<T>(T list, string fileName)
         {
-            XmlSerializer xmlFormat = new XmlSerializer(typeof(T));
-            using (Stream fStream = new FileStream(fileName,
-            FileMode.Create, FileAccess.Write, FileShare.None))
+            using  (StreamWriter sw = File.CreateText(fileName))
             {
-                xmlFormat.Serialize(fStream, list);
+                JsonSerializer serializer = new();
+                serializer.Serialize(sw, list);
             }
         }
         public static T ReadAsXmlFormat<T>(string fileName)
         {
-            XmlSerializer xmlFormat = new XmlSerializer(typeof(T));
-            using (Stream fStream = new FileStream(fileName, FileMode.Open))
+            T result = default;
+            using (StreamReader sr = File.OpenText(fileName))
             {
-                T obj = default;
-                obj = (T)xmlFormat.Deserialize(fStream);
-                return obj;
+                JsonSerializer serializer = new();
+                result = (T)serializer.Deserialize(sr, typeof(T));
             }
+            return result;
         }
     }
 }

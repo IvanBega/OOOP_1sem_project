@@ -6,6 +6,7 @@ using System.Linq;
 using System.Media;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
@@ -99,6 +100,11 @@ namespace Project.ViewModel
                     return false;
             }
             return true;
+        }
+        public static void GetPosByClick(Point gridPos, Point p, out int row, out int column)
+        {
+            row = (int)(p.Y - gridPos.Y) / 30;
+            column = (int)(p.X - gridPos.X) / 30;
         }
     }
 }

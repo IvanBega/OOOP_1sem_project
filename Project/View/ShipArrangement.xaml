@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
         mc:Ignorable="d"
-        Title="ShipArrangement" Height="450" Width="800" DataContext="ShipArrangement" WindowStyle="None">
+        Title="ShipArrangement" Height="450" Width="800" DataContext="ShipArrangement" WindowStyle="None" MouseDoubleClick="Window_MouseDown">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="10*"></ColumnDefinition>
             <ColumnDefinition Width="7*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Width="300" Height="300" 
+        <Grid Grid.Column="0" Width="300" Height="300"
               VerticalAlignment="Center" x:Name="ArrangementGrid" HorizontalAlignment="Center" ShowGridLines="True">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
