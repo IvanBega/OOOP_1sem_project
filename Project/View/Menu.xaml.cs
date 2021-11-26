@@ -24,7 +24,8 @@ namespace Project.View
         public MenuWindow()
         {
             InitializeComponent();
-            if (File.Exists("playerCells.json") && File.Exists("enemyCells.json") && File.Exists("currentMove.json"))
+            if (File.Exists("playerCells.json") && File.Exists("enemyCells.json") && File.Exists("currentMove.json") 
+                && File.Exists("playerShips.json") && File.Exists("EnemyShips.json"))
             {
                 ContinueBtn.IsEnabled = true;
             }

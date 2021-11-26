@@ -37,7 +37,7 @@ namespace Project.View
         {
             if (shipCount == null || shipCount.Length == 0)
             {
-                shipCount = new int[5] { 1, 0, 0, 0, 0 };
+                //shipCount = new int[5] { 1, 0, 0, 0, 0 };
             }
             wnd.enemyShips = RandomSetup();
             Array.Copy(shipCount, shipCountCopy, 5);

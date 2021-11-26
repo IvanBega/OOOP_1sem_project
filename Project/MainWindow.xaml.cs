@@ -39,24 +39,6 @@ namespace Project
         public event Action FinishedMove;
         private AI EnemyAI;
         private Point enemyGridPos = new Point(420,40);
-
-        public void RestoreGameState()
-        {
-            playerCells = Serializer.ReadAsJsonFormat<CellState[,]>("playerCells.json");
-            enemyCells = Serializer.ReadAsJsonFormat<CellState[,]>("enemyCells.json");
-            playerShips = Serializer.ReadAsJsonFormat<List<Ship>>("playerShips.json");
-            enemyShips = Serializer.ReadAsJsonFormat<List<Ship>>("enemyShips.json");
-            currentMove = Serializer.ReadAsJsonFormat<MoveType>("currentMove.json");
-
-            GameBoard.InitGrid(PlayerGrid, playerShips, playerCells);
-            GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells);
-            GameBoard.DrawCellsOnGrid(PlayerGrid, playerCells);
-            GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells);
-
-            EnemyAI = new AI(playerCells);
-            this.Show();
-        }
-
         public MainWindow()
         {
             InitializeComponent();
@@ -107,7 +89,7 @@ namespace Project
                 damagedShip.DamageCount += 1;
                 if (damagedShip.DamageCount == damagedShip.Length)
                 {
-                    GameBoard.DrawShip(damagedShip, opponentGrid, opponentCellState, Brushes.Red, CellState.ShotDestroyed); // marking destroyed ship in red
+                    GameBoard.DrawShip(damagedShip, opponentGrid, opponentCellState, Brushes.Red, CellState.ShotDestroyedRed); // marking destroyed ship in red
                 }
                 else
                 {
@@ -120,8 +102,9 @@ namespace Project
                     Grid.SetColumn(rect, pos.X);
                     Grid.SetRow(rect, pos.Y);
                     opponentGrid.Children.Add(rect);
+                    opponentCellState[pos.X, pos.Y] = CellState.ShotDestroyed;
                 }
-                opponentCellState[pos.X, pos.Y] = CellState.ShotDestroyed;
+                //opponentCellState[pos.X, pos.Y] = CellState.ShotDestroyed;
                 if (moveType == MoveType.EnemyMove)
                 {
                     EnemyAI.AddAdjacentToQueue(pos);
@@ -244,6 +227,22 @@ namespace Project
                     }
                 }
             }
+        }
+        public void RestoreGameState()
+        {
+            playerCells = Serializer.ReadAsJsonFormat<CellState[,]>("playerCells.json");
+            enemyCells = Serializer.ReadAsJsonFormat<CellState[,]>("enemyCells.json");
+            playerShips = Serializer.ReadAsJsonFormat<List<Ship>>("playerShips.json");
+            enemyShips = Serializer.ReadAsJsonFormat<List<Ship>>("enemyShips.json");
+            currentMove = Serializer.ReadAsJsonFormat<MoveType>("currentMove.json");
+            GameBoard.DrawCellsOnGrid(PlayerGrid, playerCells);
+            GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells);
+            //GameBoard.InitGrid(PlayerGrid, playerShips, playerCells);
+            //GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells);
+
+
+            EnemyAI = new AI(playerCells);
+            this.Show();
         }
     }
 

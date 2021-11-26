@@ -6,7 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
-
 namespace Project.Model
 {
     public static class Serializer
@@ -39,7 +38,6 @@ namespace Project.Model
                 serializer.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
                 serializer.TypeNameHandling = Newtonsoft.Json.TypeNameHandling.Auto;
                 serializer.Formatting = Newtonsoft.Json.Formatting.Indented;
-
                 serializer.Serialize(sw, list);
             }
         }

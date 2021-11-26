@@ -53,7 +53,7 @@ namespace Project.ViewModel
                     Grid.SetColumn(rect, ship.Position.X);
                     Grid.SetRow(rect, j);
                     grid.Children.Add(rect);
-                    cells[ship.Position.X, j] = CellState.Occupied;
+                    cells[ship.Position.X, j] = cellState;
                 }
             }
         }
@@ -135,6 +135,28 @@ namespace Project.ViewModel
                             Grid.SetColumn(rect, i);
                             Grid.SetRow(rect, j);
                             grid.Children.Add(rect);
+                            break;
+                        case CellState.ShotDestroyedRed:
+                            Rectangle rect2 = new()
+                            {
+                                Height = 30,
+                                Width = 30,
+                                Fill = Brushes.Red
+                            };
+                            Grid.SetColumn(rect2, i);
+                            Grid.SetRow(rect2, j);
+                            grid.Children.Add(rect2);
+                            break;
+                        case CellState.Occupied:
+                            Rectangle rect3 = new()
+                            {
+                                Height = 30,
+                                Width = 30,
+                                Fill = Brushes.Black
+                            };
+                            Grid.SetColumn(rect3, i);
+                            Grid.SetRow(rect3, j);
+                            grid.Children.Add(rect3);
                             break;
                     }
                 }
