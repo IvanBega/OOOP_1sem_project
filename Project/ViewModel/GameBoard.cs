@@ -15,11 +15,11 @@ namespace Project.ViewModel
 {
     public static class GameBoard
     {
-        public static void InitGrid(Grid grid, List<Ship> ships, CellState[,] cells)
+        public static void InitGrid(Grid grid, List<Ship> ships, CellState[,] cells, SolidColorBrush fill)
         {
             foreach (Ship s in ships)
             {
-                DrawShip(s, grid, cells, Brushes.Black, CellState.Occupied);
+                DrawShip(s, grid, cells, fill, CellState.Occupied);
             }
         }
         public static void DrawShip(Ship ship, Grid grid, CellState[,] cells, SolidColorBrush fill, CellState cellState)
@@ -106,7 +106,7 @@ namespace Project.ViewModel
             row = (int)(p.Y - gridPos.Y) / 30;
             column = (int)(p.X - gridPos.X) / 30;
         }
-        public static void DrawCellsOnGrid(Grid grid, CellState[,] cells)
+        public static void DrawCellsOnGrid(Grid grid, CellState[,] cells, bool drawBlack)
         {
             for (int i = 0; i < 10; i++)
             {
@@ -148,6 +148,8 @@ namespace Project.ViewModel
                             grid.Children.Add(rect2);
                             break;
                         case CellState.Occupied:
+                            if (!drawBlack)
+                                continue;
                             Rectangle rect3 = new()
                             {
                                 Height = 30,
@@ -161,6 +163,21 @@ namespace Project.ViewModel
                     }
                 }
             }
+        }
+        public static int GetOccupiedCells(CellState[,] cells)
+        {
+            int count = 0;
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (cells[i,j] == CellState.Occupied)
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
         }
     }
 }

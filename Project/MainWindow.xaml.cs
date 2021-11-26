@@ -39,6 +39,9 @@ namespace Project
         public event Action FinishedMove;
         private AI EnemyAI;
         private Point enemyGridPos = new Point(420,40);
+        private int playerCellsLeft;
+        private int enemyCellsLeft;
+        private bool gameActive = true;
         public MainWindow()
         {
             InitializeComponent();
@@ -51,10 +54,12 @@ namespace Project
         }
         public void InitGameBoard()
         {
-            GameBoard.InitGrid(PlayerGrid, playerShips, playerCells);
-            GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells);
-            FinishedMove += Game;
+            GameBoard.InitGrid(PlayerGrid, playerShips, playerCells, Brushes.Black);
+            GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells, Brushes.Black);
             EnemyAI = new(playerCells);
+
+            playerCellsLeft = GameBoard.GetOccupiedCells(playerCells);
+            enemyCellsLeft = playerCellsLeft;
         }
         public bool Shoot(Position pos, MoveType moveType) 
         {
@@ -87,9 +92,21 @@ namespace Project
             {
                 Ship damagedShip = GameBoard.GetShipByPos(opponentShips, pos.X, pos.Y);
                 damagedShip.DamageCount += 1;
+                if (currentMove == MoveType.PlayerMove)
+                    enemyCellsLeft -= 1;
+                else
+                    playerCellsLeft -= 1;
+                botX.Content = playerCellsLeft.ToString();
+                botY.Content = enemyCellsLeft.ToString();
+
                 if (damagedShip.DamageCount == damagedShip.Length)
                 {
                     GameBoard.DrawShip(damagedShip, opponentGrid, opponentCellState, Brushes.Red, CellState.ShotDestroyedRed); // marking destroyed ship in red
+                    if (playerCellsLeft == 0 || enemyCellsLeft == 0)
+                    {
+                        GameOver();
+                        gameActive = false;
+                    }
                 }
                 else
                 {
@@ -143,36 +160,6 @@ namespace Project
             }
             FinishedMove?.Invoke();
         }
-        public async void Game()
-        {
-            if (currentMove == MoveType.PlayerMove)
-            {
-                btn1.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                Random r = new();
-                int delay = r.Next(900, 2100);
-                await Task.Delay(delay);
-                bool shootResult;
-                Position pos;
-                //pos = EnemyAI.RandomFreePosition();
-                pos = EnemyAI.PredictMove();
-                shootResult = Shoot(pos, MoveType.EnemyMove);
-                //botX.Content = pos.X;
-                botX.Content = EnemyAI.GetFreePosCount();
-                botY.Content = pos.Y;
-                if (shootResult)
-                {
-                    currentMove = MoveType.EnemyMove;
-                }
-                else
-                {
-                    currentMove = MoveType.PlayerMove;
-                }
-                FinishedMove?.Invoke();
-            }
-        }    
         private bool ShotCell(CellState[,] cells, int x, int y)
         {
             return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotMissed;
@@ -192,7 +179,7 @@ namespace Project
         private async void EnemyAttack()
         {
             bool shootResult = true;
-            while (shootResult)
+            while (shootResult && gameActive)
             {
                 Random r = new();
                 int delay = r.Next(900, 2100);
@@ -204,6 +191,9 @@ namespace Project
         }
         private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (!gameActive)
+                return;
+
             if (currentMove == MoveType.PlayerMove)
             {
                 Point pos = e.GetPosition(this);
@@ -213,7 +203,8 @@ namespace Project
                 {
                     GameBoard.GetPosByClick(enemyGridPos, pos, out row, out column);
 
-                    if (enemyCells[column, row] == CellState.ShotMissed || enemyCells[column, row] == CellState.ShotDestroyed)
+                    if (enemyCells[column, row] == CellState.ShotMissed || enemyCells[column, row] == CellState.ShotDestroyed ||
+                        enemyCells[column, row] == CellState.ShotDestroyedRed)
                     {
                         MessageBox.Show("You've already shot this position! Try again...");
                         btn1.Visibility = Visibility.Visible;
@@ -235,14 +226,50 @@ namespace Project
             playerShips = Serializer.ReadAsJsonFormat<List<Ship>>("playerShips.json");
             enemyShips = Serializer.ReadAsJsonFormat<List<Ship>>("enemyShips.json");
             currentMove = Serializer.ReadAsJsonFormat<MoveType>("currentMove.json");
-            GameBoard.DrawCellsOnGrid(PlayerGrid, playerCells);
-            GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells);
+            GameBoard.DrawCellsOnGrid(PlayerGrid, playerCells, true);
+            GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells, false);
             //GameBoard.InitGrid(PlayerGrid, playerShips, playerCells);
             //GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells);
 
 
             EnemyAI = new AI(playerCells);
+            playerCellsLeft = GameBoard.GetOccupiedCells(playerCells);
+            enemyCellsLeft = GameBoard.GetOccupiedCells(enemyCells);
             this.Show();
+            if (currentMove == MoveType.EnemyMove)
+            {
+                EnemyAttack();
+            }
+        }
+        private void GameOver()
+        {
+            DeleteAllFiles();
+            if (currentMove == MoveType.PlayerMove)
+            {
+                MessageBox.Show("Congratulations! You have won the game!");
+            }
+            else
+            {
+                MessageBox.Show("Oh no! It looks like you have lost...");
+            }
+            
+        }
+        private void DeleteAllFiles()
+        {
+            if (File.Exists("playerCells.json"))
+                File.Delete("playerCells.json");
+
+            if (File.Exists("enemyCells.json"))
+                File.Delete("enemyCells.json");
+
+            if (File.Exists("playerShips.json"))
+                File.Delete("playerShips.json");
+
+            if (File.Exists("enemyShips.json"))
+                File.Delete("enemyShips.json");
+
+            if (File.Exists("currentMove.json"))
+                File.Delete("currentMove.json");
         }
     }
 

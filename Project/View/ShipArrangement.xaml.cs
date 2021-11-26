@@ -80,13 +80,18 @@ namespace Project.View
 
                             for (int j = 0; j < size; j++)
                             {
-                                if (cells[index_i, index_j + j] == CellState.Occupied || index_j + j >= 10)
+                                if (index_j + j >= 10 || cells[index_i, index_j + j] == CellState.Occupied)
                                 {
                                     flag = true;
                                     index_j = r.Next(0, 10 - size + 1);
                                     break;
                                 }
                             }
+                            
+                        }
+                        for (int j = 0; j < size; j++)
+                        {
+                            cells[index_i, index_j + j] = CellState.Occupied;
                         }
                     }
                     else
@@ -99,13 +104,17 @@ namespace Project.View
 
                             for (int i = 0; i < size; i++)
                             {
-                                if (cells[index_i + i, index_j] == CellState.Occupied || index_i + i >= 10)
+                                if (index_i + i >= 10 || cells[index_i + i, index_j] == CellState.Occupied)
                                 {
                                     flag = true;
                                     index_i = r.Next(0, 10 - size + 1);
                                     break;
                                 }
                             }
+                        }
+                        for (int i = 0; i < size; i++)
+                        {
+                            cells[index_i + i, index_j] = CellState.Occupied;
                         }
                     }
                     Position pos = new(index_j, index_i);
@@ -229,7 +238,6 @@ namespace Project.View
             this.Close();
             wnd.Show();
             wnd.InitGameBoard();
-            wnd.Game();
         }
         private void ResetShipBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -257,7 +265,7 @@ namespace Project.View
             Array.Clear(playerCells, 0, playerCells.Length);
             wnd.playerShips.Clear();
             wnd.playerShips = RandomSetup();
-            GameBoard.InitGrid(ArrangementGrid, wnd.playerShips, playerCells);
+            GameBoard.InitGrid(ArrangementGrid, wnd.playerShips, playerCells, Brushes.Black);
 
             PlaceShipBtn.Visibility = Visibility.Hidden;
             ProceedBtn.Visibility = Visibility.Visible;
