@@ -50,7 +50,7 @@
                 </RowDefinition>
                 <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid x:Name="MiniShipGrid" ShowGridLines="True" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid x:Name="MiniShipGrid" ShowGridLines="True" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="150">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
@@ -71,16 +71,12 @@
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button x:Name="PlaceShipBtn" Grid.Column="0" Click="PlaceShipBtn_Click" Content="Place" FontSize="14" Height="60" Width="60"/>
-                <Button x:Name="ProceedBtn" Grid.Column="1" Click="ProceedBtn_Click" Content="Proceed" FontSize="14" Height="60" Width="60" Visibility="Hidden"/>
-                <Button x:Name="ResetShipBtn" Grid.Column="2" Click="ResetShipBtn_Click"  Content="Reset" FontSize="14" Height="60" Width="60"/>
-                <Button x:Name="RandomizeShipBtn" Grid.Column="3" Click="RandomizeShipBtn_Click"  Content="Random" FontSize="14" Height="60" Width="60"/>
+                <!--<Button x:Name="PlaceShipBtn" Grid.Column="0" Click="PlaceShipBtn_Click" Content="Place" FontSize="14" Height="60" Width="60"/>-->
+                <Button x:Name="ProceedBtn" Grid.Column="2" Click="ProceedBtn_Click" Content="Proceed" FontSize="14" Height="60" Width="60" Visibility="Hidden"/>
+                <Button x:Name="ResetShipBtn" Grid.Column="1" Click="ResetShipBtn_Click"  Content="Reset" FontSize="14" Height="60" Width="60"/>
+                <Button x:Name="RandomizeShipBtn" Grid.Column="0" Click="RandomizeShipBtn_Click"  Content="Random" FontSize="14" Height="60" Width="60"/>
             </Grid>
-
-            <TextBox x:Name="xCoord" FontSize="20" Grid.Column="0" Grid.Row="1" Width="50" Height="50" HorizontalAlignment="Left"/>
-            <TextBox x:Name="yCoord" FontSize="20" Grid.Column="0" Grid.Row="1" Width="50" Height="50"/>
             <ComboBox x:Name="ComboBox" Width="100" Height="30" Grid.Column="1" Grid.Row="1">
                 <TextBlock>Horizontal</TextBlock>
                 <TextBlock>Vertical</TextBlock>

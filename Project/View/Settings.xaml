@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
         mc:Ignorable="d"
-        Title="Settings" Height="350" Width="339" WindowStyle="None">
+        Title="Settings" Height="400" Width="339" WindowStyle="None">
     <Grid>
         <Grid.ColumnDefinitions>
         </Grid.ColumnDefinitions>
@@ -20,12 +20,18 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Label Content="Select amount of each ship" Grid.Row="0" HorizontalAlignment="Center" FontSize="18" VerticalAlignment="Center"></Label>
-        <Label Content="Select difficulty" Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"></Label>
-        <Slider x:Name="dfSlider" Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left" Width="280" Minimum="0.1" Maximum="0.8" ValueChanged="Slider_ValueChanged"></Slider>
-        <Label x:Name="dfLabel" Grid.Row="8" Width="50" HorizontalAlignment="Right" FontSize="18"></Label>
-        <Button Grid.Row="9" Content="Apply" FontSize="18" Click="Next1_Click"></Button>
+        <Label Content="Select difficulty" Grid.Row="8" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"></Label>
+        <Slider x:Name="dfSlider" Grid.Row="9" VerticalAlignment="Center" HorizontalAlignment="Left" Width="280" Minimum="0.1" Maximum="0.8" ValueChanged="Slider_ValueChanged"></Slider>
+        <Label x:Name="dfLabel" Grid.Row="9" Width="50" HorizontalAlignment="Right" FontSize="18"></Label>
+        <Button Grid.Row="10" Content="Apply" FontSize="18" Click="Next1_Click"></Button>
+        <Button Grid.Row="11" Content="Cancel" FontSize="18" Click="Cancel_Click"></Button>
+        <Label Grid.Row="7" Content="Tiles limit:" FontSize="18" VerticalAlignment="Center"></Label>
+        <Label  x:Name="tilesLbl" Grid.Row="7" FontSize="18" Margin="93,0,182,31" Grid.RowSpan="2" />
+        <Label Grid.Row="7" Content="/ 15" FontSize="18" Margin="116,0,161,30" Grid.RowSpan="2" />
         <Grid ShowGridLines="True" Grid.Row="1" Grid.RowSpan="6">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
@@ -55,11 +61,11 @@
             <Label HorizontalAlignment="Center" Content="Battleships" FontSize="20" Grid.Column="0" Grid.Row="4"></Label>
             <Label HorizontalAlignment="Center" Content="Carriers" FontSize="20" Grid.Column="0" Grid.Row="5"></Label>
 
-            <TextBox x:Name="PatrolboatCount" Grid.Column="2" Grid.Row="1" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
-            <TextBox x:Name="DestroyerCount" Grid.Column="2" Grid.Row="2" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
-            <TextBox x:Name="SubmarineCount" Grid.Column="2" Grid.Row="3" Text="1"  HorizontalAlignment="Center" FontSize="20"></TextBox>
-            <TextBox x:Name="BattleshipCount" Grid.Column="2" Grid.Row="4" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
-            <TextBox x:Name="CarrierCount" Grid.Column="2" Grid.Row="5" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
+            <TextBox x:Name="PatrolboatCount" Grid.Column="2" Grid.Row="1" Text="1" HorizontalAlignment="Center" TextChanged="Text_Changed" FontSize="20"></TextBox>
+            <TextBox x:Name="DestroyerCount" Grid.Column="2" Grid.Row="2" Text="1" HorizontalAlignment="Center" TextChanged="Text_Changed" FontSize="20"></TextBox>
+            <TextBox x:Name="SubmarineCount" Grid.Column="2" Grid.Row="3" Text="1"  HorizontalAlignment="Center" TextChanged="Text_Changed" FontSize="20"></TextBox>
+            <TextBox x:Name="BattleshipCount" Grid.Column="2" Grid.Row="4" Text="1" HorizontalAlignment="Center" TextChanged="Text_Changed" FontSize="20"></TextBox>
+            <TextBox x:Name="CarrierCount" Grid.Column="2" Grid.Row="5" Text="1" HorizontalAlignment="Center" TextChanged="Text_Changed" FontSize="20"></TextBox>
         </Grid>
     </Grid>
 </Window>

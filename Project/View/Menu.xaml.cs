@@ -25,7 +25,7 @@ namespace Project.View
         {
             InitializeComponent();
             if (File.Exists("playerCells.json") && File.Exists("enemyCells.json") && File.Exists("currentMove.json") 
-                && File.Exists("playerShips.json") && File.Exists("EnemyShips.json"))
+                && File.Exists("playerShips.json") && File.Exists("enemyShips.json"))
             {
                 ContinueBtn.IsEnabled = true;
             }

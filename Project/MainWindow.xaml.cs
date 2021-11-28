@@ -41,7 +41,7 @@ namespace Project
         private Point enemyGridPos = new Point(420,40);
         private int playerCellsLeft;
         private int enemyCellsLeft;
-        private bool gameActive = true;
+        private bool gameActive = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -62,6 +62,7 @@ namespace Project
             enemyCellsLeft = playerCellsLeft;
             botX.Content = playerCellsLeft.ToString();
             botY.Content = enemyCellsLeft.ToString();
+            gameActive = true;
         }
         public bool Shoot(Position pos, MoveType moveType) 
         {
@@ -104,6 +105,7 @@ namespace Project
                 if (damagedShip.DamageCount == damagedShip.Length)
                 {
                     GameBoard.DrawShip(damagedShip, opponentGrid, opponentCellState, Brushes.Red, CellState.ShotDestroyedRed); // marking destroyed ship in red
+                    GameBoard.DrawShipBorders(damagedShip, opponentGrid, Brushes.White, opponentCellState);
                     if (playerCellsLeft == 0 || enemyCellsLeft == 0)
                     {
                         GameOver();
@@ -199,6 +201,7 @@ namespace Project
         }
         public void RestoreGameState()
         {
+            gameActive = true;
             playerCells = Serializer.ReadAsJsonFormat<CellState[,]>("playerCells.json");
             enemyCells = Serializer.ReadAsJsonFormat<CellState[,]>("enemyCells.json");
             playerShips = Serializer.ReadAsJsonFormat<List<Ship>>("playerShips.json");
@@ -206,7 +209,14 @@ namespace Project
             currentMove = Serializer.ReadAsJsonFormat<MoveType>("currentMove.json");
             GameBoard.DrawCellsOnGrid(PlayerGrid, playerCells, true);
             GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells, false);
-
+            foreach(Ship s in playerShips)
+            {
+                GameBoard.DrawShipBorders(s, PlayerGrid, Brushes.White, playerCells);
+            }
+            foreach(Ship s in enemyShips)
+            {
+                GameBoard.DrawShipBorders(s, EnemyGrid, Brushes.White, enemyCells);
+            }
             EnemyAI = new AI(playerCells, difficulty);
             playerCellsLeft = GameBoard.GetOccupiedCells(playerCells);
             enemyCellsLeft = GameBoard.GetOccupiedCells(enemyCells);
@@ -224,7 +234,7 @@ namespace Project
             GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells, true);
             foreach(Ship s in enemyShips)
             {
-                GameBoard.DrawShipBorders(s, EnemyGrid, Brushes.White);
+                GameBoard.DrawShipBorders(s, EnemyGrid, Brushes.White, enemyCells);
             }
             if (currentMove == MoveType.PlayerMove)
             {

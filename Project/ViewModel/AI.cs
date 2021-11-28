@@ -80,7 +80,7 @@ namespace Project.ViewModel
         }
         private bool ShotCell(int x, int y)
         {
-            return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotDestroyed;
+            return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotDestroyed || cells[x,y] == CellState.ShotDestroyedRed;
         }
         private Compass GetRandomCompass()
         {

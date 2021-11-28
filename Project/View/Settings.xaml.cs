@@ -25,6 +25,8 @@ namespace Project.View
         private int[] shipCount;
         private bool init = false;
         private double difficulty;
+        private int tilesLimit = 15;
+        private bool validData = false;
         public Settings()
         {
             InitializeComponent();
@@ -37,8 +39,9 @@ namespace Project.View
                 SubmarineCount.Text = shipCount[2].ToString();
                 BattleshipCount.Text = shipCount[3].ToString();
                 CarrierCount.Text = shipCount[4].ToString();
-                //
+                validData = true;
                 wnd.shipCount = shipCount;
+                tilesLbl.Content = shipCount[0] + shipCount[1] * 2 + shipCount[2] & 3 + shipCount[3] & 4 + shipCount[4] * 5;
             }
             init = true;
             if (File.Exists("difficulty.json"))
@@ -49,11 +52,12 @@ namespace Project.View
             }        
         }
         private void Next1_Click(object sender, RoutedEventArgs e)
-        {
-            // to do: input check
-            //ShipArrangement sa = new();
-            //sa.Show();
-            //this.Close();   
+        {  
+            if (!validData)
+            {
+                MessageBox.Show("Incorrect input data!");
+                return;
+            }
             if (shipCount == null)
             {
                 shipCount = new int[5];
@@ -68,8 +72,6 @@ namespace Project.View
             Serializer.SaveAsJsonFormat(shipCount, "ShipCount.json");
             Serializer.SaveAsJsonFormat(difficulty, "difficulty.json");
             this.Hide();
-            //sa.shipCount = shipCount;
-            //sa.SetShipCount();
         }
         
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -78,6 +80,46 @@ namespace Project.View
             {
                 dfLabel.Content = e.NewValue.ToString("0.00");
             }
+        }
+
+        private void Text_Changed(object sender, TextChangedEventArgs e)
+        {
+            if (!init)
+                return;
+            bool result1, result2, result3, result4, result5;
+            int count1, count2, count3, count4, count5, tiles;
+            result1 = int.TryParse(PatrolboatCount.Text, out count1);
+            result2 = int.TryParse(DestroyerCount.Text, out count2);
+            result3 = int.TryParse(SubmarineCount.Text, out count3);
+            result4 = int.TryParse(BattleshipCount.Text, out count4);
+            result5 = int.TryParse(CarrierCount.Text, out count5);
+            if (result1 && result2 && result3 && result4 && result5
+                && count1 >= 0 && count2 >= 0 && count3 >= 0 && count4 >= 0 && count5 >= 0)
+            {
+                tiles = count1 + 2 * count2 + 3 * count3 + 4 * count4 + 5 * count5;
+                tilesLbl.Content = tiles.ToString();
+                if (tiles <= tilesLimit)
+                {
+                    validData = true;
+                    tilesLbl.Foreground = Brushes.Black;
+                }
+                else
+                {
+                    if (tiles > 99)
+                        tilesLbl.Content = "??";
+                    validData = false;
+                    tilesLbl.Foreground = Brushes.Red;
+                }
+            }
+            else
+            {
+                tilesLbl.Content = "??";
+            }
+        }
+
+        private void Cancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
         }
     }
 }

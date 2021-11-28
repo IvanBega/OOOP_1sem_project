@@ -152,50 +152,6 @@ namespace Project.View
                 MiniShipGrid.Children.Add(rect);
             }
         }
-        private void PlaceShipBtn_Click(object sender, RoutedEventArgs e)
-        {
-            int x = 0, y = 0;
-            Ship ship;
-            bool flag = int.TryParse(xCoord.Text, out x) && int.TryParse(yCoord.Text, out y);
-            if (!flag)
-            {
-                MessageBox.Show("Could not recognize coordinates! Try again...");
-                return;
-            }
-            Position position = new(x - 1, y - 1);
-            Direction direction = Direction.Horizontal;
-            if (ComboBox.SelectedIndex == 1)
-            {
-                direction = Direction.Vertical;
-            }
-            if (!GameBoard.CanPlaceShip(playerCells, x - 1, y - 1, index + 1, direction))
-            {
-                SoundEffect.PlayErrorSound();
-                MessageBox.Show("Can't place ship here!");
-                return;
-            }
-            if (index < 5 && shipCount[index] > 0)
-            {
-                ship = InitShipBySize(index + 1, position, direction);
-                wnd.playerShips.Add(ship);
-                GameBoard.DrawShip(ship, ArrangementGrid, playerCells, Brushes.Black, CellState.Occupied);
-                shipCount[index]--;
-                while (index < 5 && shipCount[index] == 0)
-                {
-                    index++;
-                }
-                if (index < 5)
-                {
-                    drawMiniShip(index + 1);
-                }
-            }
-            if (index == 5)
-            {
-                PlaceShipBtn.Visibility = Visibility.Hidden;
-                ProceedBtn.Visibility = Visibility.Visible;
-                MiniShipGrid.Children.Clear();
-            }
-        }
         private void PlaceShip(int x, int y)
         {
             Ship ship;
@@ -216,6 +172,7 @@ namespace Project.View
                 ship = InitShipBySize(index + 1, position, direction);
                 wnd.playerShips.Add(ship);
                 GameBoard.DrawShip(ship, ArrangementGrid, playerCells, Brushes.Black, CellState.Occupied);
+                GameBoard.DrawShipBorders(ship, ArrangementGrid, Brushes.White, playerCells);
                 shipCount[index]--;
                 while (index < 5 && shipCount[index] == 0)
                 {
@@ -228,7 +185,6 @@ namespace Project.View
             }
             if (index == 5)
             {
-                PlaceShipBtn.Visibility = Visibility.Hidden;
                 ProceedBtn.Visibility = Visibility.Visible;
                 MiniShipGrid.Children.Clear();
             }
@@ -241,11 +197,11 @@ namespace Project.View
         }
         private void ResetShipBtn_Click(object sender, RoutedEventArgs e)
         {
+            ResetPlayerCells();
             index = 0;
             MiniShipGrid.Children.Clear();
             Array.Copy(shipCountCopy, shipCount, 5);
             Array.Clear(playerCells, 0, playerCells.Length);
-            PlaceShipBtn.Visibility = Visibility.Visible;
             ProceedBtn.Visibility = Visibility.Hidden;
             wnd.playerShips.Clear();
             ArrangementGrid.Children.Clear();
@@ -259,15 +215,16 @@ namespace Project.View
         }
         private void RandomizeShipBtn_Click(object sender, RoutedEventArgs e)
         {
+            ResetPlayerCells();
             index = 5;
             ArrangementGrid.Children.Clear();
             Array.Copy(shipCountCopy, shipCount, 5);
             Array.Clear(playerCells, 0, playerCells.Length);
+            MiniShipGrid.Children.Clear();
             wnd.playerShips.Clear();
             wnd.playerShips = RandomSetup();
             GameBoard.InitGrid(ArrangementGrid, wnd.playerShips, playerCells, Brushes.Black);
 
-            PlaceShipBtn.Visibility = Visibility.Hidden;
             ProceedBtn.Visibility = Visibility.Visible;
         }
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -284,6 +241,16 @@ namespace Project.View
         {
             row = (int) (p.Y - gridPos.Y) / 30;
             column = (int)(p.X - gridPos.X) / 30;
+        }
+        private void ResetPlayerCells()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    playerCells[i, j] = CellState.Free;
+                }
+            }
         }
     }
 }
