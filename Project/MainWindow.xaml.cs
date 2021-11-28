@@ -36,7 +36,6 @@ namespace Project
         public Settings settings;
         private MenuWindow menu;
         private MoveType currentMove = MoveType.PlayerMove;
-        public event Action FinishedMove;
         private AI EnemyAI;
         public double difficulty;
         private Point enemyGridPos = new Point(420,40);
@@ -163,6 +162,9 @@ namespace Project
                 await Task.Delay(delay);
                 Position pos = EnemyAI.PredictMove();
                 shootResult = Shoot(pos, MoveType.EnemyMove);
+                int x = pos.X + 1;
+                int y = pos.Y + 1;
+                shotLbl.Content = "Bot shot at: " + x + " " + y;
             }
             currentMove = MoveType.PlayerMove;
         }
@@ -204,9 +206,6 @@ namespace Project
             currentMove = Serializer.ReadAsJsonFormat<MoveType>("currentMove.json");
             GameBoard.DrawCellsOnGrid(PlayerGrid, playerCells, true);
             GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells, false);
-            //GameBoard.InitGrid(PlayerGrid, playerShips, playerCells);
-            //GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells);
-
 
             EnemyAI = new AI(playerCells, difficulty);
             playerCellsLeft = GameBoard.GetOccupiedCells(playerCells);
@@ -222,6 +221,11 @@ namespace Project
         private void GameOver()
         {
             DeleteAllFiles();
+            GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells, true);
+            foreach(Ship s in enemyShips)
+            {
+                GameBoard.DrawShipBorders(s, EnemyGrid, Brushes.White);
+            }
             if (currentMove == MoveType.PlayerMove)
             {
                 MessageBox.Show("Congratulations! You have won the game!");

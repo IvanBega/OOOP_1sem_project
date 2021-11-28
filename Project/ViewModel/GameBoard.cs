@@ -22,6 +22,59 @@ namespace Project.ViewModel
                 DrawShip(s, grid, cells, fill, CellState.Occupied);
             }
         }
+        public static void DrawShipBorders(Ship ship, Grid grid, SolidColorBrush fill)
+        {
+            if (ship.Direction == Direction.Horizontal)
+            {
+                for (int i = ship.Position.X; i < ship.Length + ship.Position.X; i++)
+                {
+                    Border b = new();
+                    b.BorderThickness = new Thickness { Bottom = 5, Top = 5, Left = 0, Right = 0 };
+                    b.BorderBrush = fill;
+                    Grid.SetColumn(b, i);
+                    Grid.SetRow(b, ship.Position.Y);
+                    grid.Children.Add(b);
+                }
+                Border right = new();
+                right.BorderThickness = new Thickness { Right = 5 };
+                right.BorderBrush = fill;
+                Grid.SetRow(right, ship.Position.Y);
+                Grid.SetColumn(right, ship.Position.X + ship.Length - 1);
+                grid.Children.Add(right);
+
+                Border left = new();
+                left.BorderThickness = new Thickness { Left = 5 };
+                left.BorderBrush = fill;
+                Grid.SetRow(left, ship.Position.Y);
+                Grid.SetColumn(left, ship.Position.X);
+                grid.Children.Add(left);
+            }
+            else
+            {
+                for (int j = ship.Position.Y; j < ship.Length + ship.Position.Y; j++)
+                {
+                    Border b = new();
+                    b.BorderThickness = new Thickness {Left = 5, Right = 5 };
+                    b.BorderBrush = fill;
+                    Grid.SetColumn(b, ship.Position.X);
+                    Grid.SetRow(b, j);
+                    grid.Children.Add(b);
+                }
+                Border top = new();
+                top.BorderThickness = new Thickness { Top = 5 };
+                top.BorderBrush = fill;
+                Grid.SetColumn(top, ship.Position.X);
+                Grid.SetRow(top, ship.Position.Y);
+                grid.Children.Add(top);
+
+                Border bottom = new();
+                bottom.BorderThickness = new Thickness { Bottom = 5 };
+                bottom.BorderBrush = fill;
+                Grid.SetColumn(bottom, ship.Position.X);
+                Grid.SetRow(bottom, ship.Position.Y + ship.Length - 1);
+                grid.Children.Add(bottom);
+            }
+        }
         public static void DrawShip(Ship ship, Grid grid, CellState[,] cells, SolidColorBrush fill, CellState cellState)
         {
             if (ship.Direction == Direction.Horizontal)
@@ -33,10 +86,10 @@ namespace Project.ViewModel
                         Height = 30,
                         Width = 30,
                         Fill = fill
-                    };
+                    };                 
                     Grid.SetColumn(rect, i);
                     Grid.SetRow(rect, ship.Position.Y);
-                    grid.Children.Add(rect);
+                    grid.Children.Add(rect);           
                     cells[i, ship.Position.Y] = cellState;
                 }
             }
@@ -56,6 +109,7 @@ namespace Project.ViewModel
                     cells[ship.Position.X, j] = cellState;
                 }
             }
+            DrawShipBorders(ship, grid, Brushes.White);
         }
         public static Ship GetShipByPos(List<Ship> ships, int x, int y)
         {

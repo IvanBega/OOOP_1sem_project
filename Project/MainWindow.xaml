@@ -35,10 +35,13 @@
             </Grid.RowDefinitions>
         </Grid>
         <Label Content="Your tiles left: " FontSize="30" Margin="40,345,550,49"></Label>
+        <Label x:Name="shotLbl" FontSize="30" Margin="40,385,488,9"></Label>
         <Label Content="Enemy tiles left: " FontSize="30" Margin="400,345,0,0"></Label>
         <!--<Button x:Name="btn1" Margin="315,369,431,69" Click="btn1_Click"/>-->
-        <Label x:Name="lblHorizontal" Content="  1      2      3      4      5      6      7      8      9    10"
+        <Label Content="  1      2      3      4      5      6      7      8      9    10"
         	HorizontalAlignment="Left" Margin="416,10,0,398" Width="304" FontSize="14"/>
+        <Label Content="  1      2      3      4      5      6      7      8      9    10"
+        	HorizontalAlignment="Left" Margin="40,10,0,398" Width="304" FontSize="14"/>
         <TextBlock Text="1" FontSize="14" Margin="390,45,350,360"></TextBlock>
         <TextBlock Text="2" FontSize="14" Margin="390,75,350,330"></TextBlock>
         <TextBlock Text="3" FontSize="14" Margin="390,105,350,300"></TextBlock>
@@ -50,6 +53,17 @@
         <TextBlock Text="9" FontSize="14" Margin="390,285,350,120"></TextBlock>
         <TextBlock Text="10" FontSize="14" Margin="390,315,350,90"></TextBlock>
 
+        <TextBlock Text="1" FontSize="14" Margin="10,45,730,360"></TextBlock>
+        <TextBlock Text="2" FontSize="14" Margin="10,75,730,330"></TextBlock>
+        <TextBlock Text="3" FontSize="14" Margin="10,105,730,300"></TextBlock>
+        <TextBlock Text="4" FontSize="14" Margin="10,135,730,270"></TextBlock>
+        <TextBlock Text="5" FontSize="14" Margin="10,165,730,240"></TextBlock>
+        <TextBlock Text="6" FontSize="14" Margin="10,195,730,210"></TextBlock>
+        <TextBlock Text="7" FontSize="14" Margin="10,225,730,180"></TextBlock>
+        <TextBlock Text="8" FontSize="14" Margin="10,255,730,150"></TextBlock>
+        <TextBlock Text="9" FontSize="14" Margin="10,285,730,120"></TextBlock>
+        <TextBlock Text="10" FontSize="14" Margin="10,315,730,90"></TextBlock>
+        
         <Grid HorizontalAlignment="Left" Width="300" Height="300" VerticalAlignment="Top" Margin="40,40,0,0" x:Name="PlayerGrid" ShowGridLines="True">
             <Grid.RowDefinitions>
                 <RowDefinition/>
