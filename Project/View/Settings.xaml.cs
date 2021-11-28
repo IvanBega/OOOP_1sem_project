@@ -23,6 +23,8 @@ namespace Project.View
     {
         private MainWindow wnd = (MainWindow)Application.Current.MainWindow;
         private int[] shipCount;
+        private bool init = false;
+        private double difficulty;
         public Settings()
         {
             InitializeComponent();
@@ -38,6 +40,13 @@ namespace Project.View
                 //
                 wnd.shipCount = shipCount;
             }
+            init = true;
+            if (File.Exists("difficulty.json"))
+            {
+                difficulty = Serializer.ReadAsJsonFormat<double>("difficulty.json");
+                dfSlider.Value = difficulty;
+                wnd.difficulty = difficulty;
+            }        
         }
         private void Next1_Click(object sender, RoutedEventArgs e)
         {
@@ -55,10 +64,20 @@ namespace Project.View
             shipCount[3] = int.Parse(BattleshipCount.Text);
             shipCount[4] = int.Parse(CarrierCount.Text);
             wnd.shipCount = shipCount;
+            wnd.difficulty = dfSlider.Value;
             Serializer.SaveAsJsonFormat(shipCount, "ShipCount.json");
+            Serializer.SaveAsJsonFormat(difficulty, "difficulty.json");
             this.Hide();
             //sa.shipCount = shipCount;
             //sa.SetShipCount();
+        }
+        
+        private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (init)
+            {
+                dfLabel.Content = e.NewValue.ToString("0.00");
+            }
         }
     }
 }

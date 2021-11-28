@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 namespace Project.ViewModel
 {
     public class AI
-    {
-        
+    {     
         private enum Compass
         {
             North,
@@ -22,9 +21,11 @@ namespace Project.ViewModel
         private Position lastPos;
         private Compass compass;
         Random random = new();
-        public AI(CellState[,] cells)
+        public double difficulty;
+        public AI(CellState[,] cells, double difficulty)
         {
             this.cells = cells;
+            this.difficulty = difficulty;
             lastPos = RandomFreePosition();
             compass = GetRandomCompass();
         }
@@ -53,6 +54,11 @@ namespace Project.ViewModel
         private Position RandomFreePosition()
         {
             int x, y;
+            double z = random.NextDouble();
+            if (z < difficulty)
+            {
+                return GetOccupiedPosition();
+            }
             while (true)
             {
                 x = random.Next(0, 10);
@@ -189,6 +195,20 @@ namespace Project.ViewModel
                 }
             }
             return count;
+        }
+        private Position GetOccupiedPosition()
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                for (int j = 0; j < 10; j++)
+                {
+                    if (cells[i,j] == CellState.Occupied)
+                    {
+                        return new Position(i, j);
+                    }
+                }
+            }
+            return null;
         }
     }
 }

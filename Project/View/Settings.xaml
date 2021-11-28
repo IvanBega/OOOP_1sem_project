@@ -5,12 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Project.View"
         mc:Ignorable="d"
-        Title="Settings" Height="270" Width="339" WindowStyle="None">
-    <Grid ShowGridLines="true">
+        Title="Settings" Height="350" Width="339" WindowStyle="None">
+    <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -21,29 +18,48 @@
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Label HorizontalAlignment="Center" Content="Ship name" FontSize="20" Grid.Column="0" Grid.Row="1" FontWeight="Bold"></Label>
-        <Label HorizontalAlignment="Center" Content="Tiles" FontSize="20" Grid.Column="1" Grid.Row="1" FontWeight="Bold"></Label>
-        <Label HorizontalAlignment="Center" Content="Amount" FontSize="20" Grid.Column="2" Grid.Row="1" FontWeight="Bold"></Label>
+        <Label Content="Select amount of each ship" Grid.Row="0" HorizontalAlignment="Center" FontSize="18" VerticalAlignment="Center"></Label>
+        <Label Content="Select difficulty" Grid.Row="7" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18"></Label>
+        <Slider x:Name="dfSlider" Grid.Row="8" VerticalAlignment="Center" HorizontalAlignment="Left" Width="280" Minimum="0.1" Maximum="0.8" ValueChanged="Slider_ValueChanged"></Slider>
+        <Label x:Name="dfLabel" Grid.Row="8" Width="50" HorizontalAlignment="Right" FontSize="18"></Label>
+        <Button Grid.Row="9" Content="Apply" FontSize="18" Click="Next1_Click"></Button>
+        <Grid ShowGridLines="True" Grid.Row="1" Grid.RowSpan="6">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label HorizontalAlignment="Center" Content="Ship name" FontSize="20" Grid.Column="0" Grid.Row="0" FontWeight="Bold"></Label>
+            <Label HorizontalAlignment="Center" Content="Tiles" FontSize="20" Grid.Column="1" Grid.Row="0" FontWeight="Bold"></Label>
+            <Label HorizontalAlignment="Center" Content="Amount" FontSize="20" Grid.Column="2" Grid.Row="0" FontWeight="Bold"></Label>
+            <Label HorizontalAlignment="Center" Content="1" FontSize="20" Grid.Column="1" Grid.Row="1"></Label>
+            <Label HorizontalAlignment="Center" Content="2" FontSize="20" Grid.Column="1" Grid.Row="2"></Label>
+            <Label HorizontalAlignment="Center" Content="3" FontSize="20" Grid.Column="1" Grid.Row="3"></Label>
+            <Label HorizontalAlignment="Center" Content="4" FontSize="20" Grid.Column="1" Grid.Row="4"></Label>
+            <Label HorizontalAlignment="Center" Content="5" FontSize="20" Grid.Column="1" Grid.Row="5"></Label>
 
-        <Label HorizontalAlignment="Center" Content="1" FontSize="20" Grid.Column="1" Grid.Row="2"></Label>
-        <Label HorizontalAlignment="Center" Content="2" FontSize="20" Grid.Column="1" Grid.Row="3"></Label>
-        <Label HorizontalAlignment="Center" Content="3" FontSize="20" Grid.Column="1" Grid.Row="4"></Label>
-        <Label HorizontalAlignment="Center" Content="4" FontSize="20" Grid.Column="1" Grid.Row="5"></Label>
-        <Label HorizontalAlignment="Center" Content="5" FontSize="20" Grid.Column="1" Grid.Row="6"></Label>
-        
-        <Label HorizontalAlignment="Center" Content="Patrol boats" FontSize="20" Grid.Column="0" Grid.Row="2"></Label>
-        <Label HorizontalAlignment="Center" Content="Destroyers" FontSize="20" Grid.Column="0" Grid.Row="3"></Label>
-        <Label HorizontalAlignment="Center" Content="Submarines" FontSize="20" Grid.Column="0" Grid.Row="4"></Label>
-        <Label HorizontalAlignment="Center" Content="Battleships" FontSize="20" Grid.Column="0" Grid.Row="5"></Label>
-        <Label HorizontalAlignment="Center" Content="Carriers" FontSize="20" Grid.Column="0" Grid.Row="6"></Label>
-        
-        <TextBox x:Name="PatrolboatCount" Grid.Column="2" Grid.Row="2" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
-        <TextBox x:Name="DestroyerCount" Grid.Column="2" Grid.Row="3" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
-        <TextBox x:Name="SubmarineCount" Grid.Column="2" Grid.Row="4" Text="1"  HorizontalAlignment="Center" FontSize="20"></TextBox>
-        <TextBox x:Name="BattleshipCount" Grid.Column="2" Grid.Row="5" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
-        <TextBox x:Name="CarrierCount" Grid.Column="2" Grid.Row="6" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
-        <Button x:Name="NextBtn_Click" Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="3" Click="Next1_Click" Content="Next" FontSize="20"></Button>
-        <Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="3" Content="Select amount of ships" HorizontalAlignment="Center" FontSize="20"></Label>
+            <Label HorizontalAlignment="Center" Content="Patrol boats" FontSize="20" Grid.Column="0" Grid.Row="1"></Label>
+            <Label HorizontalAlignment="Center" Content="Destroyers" FontSize="20" Grid.Column="0" Grid.Row="2"></Label>
+            <Label HorizontalAlignment="Center" Content="Submarines" FontSize="20" Grid.Column="0" Grid.Row="3"></Label>
+            <Label HorizontalAlignment="Center" Content="Battleships" FontSize="20" Grid.Column="0" Grid.Row="4"></Label>
+            <Label HorizontalAlignment="Center" Content="Carriers" FontSize="20" Grid.Column="0" Grid.Row="5"></Label>
+
+            <TextBox x:Name="PatrolboatCount" Grid.Column="2" Grid.Row="1" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
+            <TextBox x:Name="DestroyerCount" Grid.Column="2" Grid.Row="2" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
+            <TextBox x:Name="SubmarineCount" Grid.Column="2" Grid.Row="3" Text="1"  HorizontalAlignment="Center" FontSize="20"></TextBox>
+            <TextBox x:Name="BattleshipCount" Grid.Column="2" Grid.Row="4" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
+            <TextBox x:Name="CarrierCount" Grid.Column="2" Grid.Row="5" Text="1" HorizontalAlignment="Center" FontSize="20"></TextBox>
+        </Grid>
     </Grid>
 </Window>

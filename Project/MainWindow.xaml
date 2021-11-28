@@ -34,7 +34,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
         </Grid>
-        <Button x:Name="btn1" Margin="315,369,431,69" Click="btn1_Click"/>
+        <Label Content="Your tiles left: " FontSize="30" Margin="40,345,550,49"></Label>
+        <Label Content="Enemy tiles left: " FontSize="30" Margin="400,345,0,0"></Label>
+        <!--<Button x:Name="btn1" Margin="315,369,431,69" Click="btn1_Click"/>-->
         <Label x:Name="lblHorizontal" Content="  1      2      3      4      5      6      7      8      9    10"
         	HorizontalAlignment="Left" Margin="416,10,0,398" Width="304" FontSize="14"/>
         <TextBlock Text="1" FontSize="14" Margin="390,45,350,360"></TextBlock>
@@ -74,11 +76,11 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
         </Grid>
-        <TextBox x:Name="xPosBox" HorizontalAlignment="Left" Margin="426,375,0,0" Text="X" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Height="50" FontSize="30"
+        <!--<TextBox x:Name="xPosBox" HorizontalAlignment="Left" Margin="426,375,0,0" Text="X" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Height="50" FontSize="30"
                  Background="AliceBlue"/>
         <TextBox x:Name="yPosBox" HorizontalAlignment="Left" Margin="510,375,0,0" Text="Y" TextWrapping="Wrap" VerticalAlignment="Top" Width="50" Height="50" FontSize="30"
-                 Background="AliceBlue"/>
-        <Label x:Name="botX" Height="40" Width="40" Content="1" FontSize="30" HorizontalAlignment="Left" Margin="34,403,0,41"></Label>
-        <Label x:Name="botY" Height="40" Width="40" Content="1" FontSize="30" HorizontalAlignment="Left" Margin="125,403,0,41"></Label>
+                 Background="AliceBlue"/>-->
+        <Label x:Name="botX" Width="40" Content="1" FontSize="30" HorizontalAlignment="Left" Margin="230,345,0,90"/>
+        <Label x:Name="botY" Width="71" Content="1" FontSize="30" HorizontalAlignment="Left" Margin="625,345,0,90"/>
     </Grid>
 </Window>

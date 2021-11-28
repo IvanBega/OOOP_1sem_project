@@ -38,6 +38,7 @@ namespace Project
         private MoveType currentMove = MoveType.PlayerMove;
         public event Action FinishedMove;
         private AI EnemyAI;
+        public double difficulty;
         private Point enemyGridPos = new Point(420,40);
         private int playerCellsLeft;
         private int enemyCellsLeft;
@@ -55,11 +56,13 @@ namespace Project
         public void InitGameBoard()
         {
             GameBoard.InitGrid(PlayerGrid, playerShips, playerCells, Brushes.Black);
-            GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells, Brushes.Black);
-            EnemyAI = new(playerCells);
+            GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells, Brushes.Transparent);
+            EnemyAI = new(playerCells, difficulty);
 
             playerCellsLeft = GameBoard.GetOccupiedCells(playerCells);
             enemyCellsLeft = playerCellsLeft;
+            botX.Content = playerCellsLeft.ToString();
+            botY.Content = enemyCellsLeft.ToString();
         }
         public bool Shoot(Position pos, MoveType moveType) 
         {
@@ -130,36 +133,6 @@ namespace Project
             }
             return false;
         }
-        private void btn1_Click(object sender, RoutedEventArgs e)
-        {
-            btn1.Visibility = Visibility.Hidden;
-            int x = 0, y = 0;
-            bool result = true;
-            result = int.TryParse(xPosBox.Text, out x) && int.TryParse(yPosBox.Text, out y);
-            if (!result || x < 0 || y < 0 || x > 10 || y > 10)
-            {
-                MessageBox.Show("Incorrect input coordinates!");
-                btn1.Visibility = Visibility.Visible;
-                return;
-            }
-            bool shootResult;
-            if (enemyCells[x-1,y-1] == CellState.ShotMissed || enemyCells[x-1,y-1] == CellState.ShotDestroyed)
-            {
-                MessageBox.Show("You've already shot this position! Try again...");
-                btn1.Visibility = Visibility.Visible;
-                return;
-            }
-            shootResult = Shoot(new Position(x - 1, y - 1), MoveType.PlayerMove);
-            if (shootResult)
-            {
-                currentMove = MoveType.PlayerMove;
-            }
-            else
-            {
-                currentMove = MoveType.EnemyMove;
-            }
-            FinishedMove?.Invoke();
-        }
         private bool ShotCell(CellState[,] cells, int x, int y)
         {
             return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotMissed;
@@ -167,11 +140,15 @@ namespace Project
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             settings.Close();
-            Serializer.SaveAsJsonFormat<List<Ship>>(playerShips, "playerShips.json");
-            Serializer.SaveAsJsonFormat <List<Ship>>(enemyShips, "enemyShips.json");
-            Serializer.SaveAsJsonFormat<CellState[,]>(playerCells, "playerCells.json");
-            Serializer.SaveAsJsonFormat<CellState[,]>(enemyCells, "enemyCells.json");
-            Serializer.SaveAsJsonFormat<MoveType>(currentMove, "currentMove.json");
+            if (gameActive)
+            {
+                Serializer.SaveAsJsonFormat<List<Ship>>(playerShips, "playerShips.json");
+                Serializer.SaveAsJsonFormat<List<Ship>>(enemyShips, "enemyShips.json");
+                Serializer.SaveAsJsonFormat<CellState[,]>(playerCells, "playerCells.json");
+                Serializer.SaveAsJsonFormat<CellState[,]>(enemyCells, "enemyCells.json");
+                Serializer.SaveAsJsonFormat<MoveType>(currentMove, "currentMove.json");
+                Serializer.SaveAsJsonFormat<double>(difficulty, "difficulty.json");
+            }
             //Serializer.SaveAsJsonFormat<List<Ship>>(playerShips, "playerShips.json");
             //Serializer.SaveAdList<Ship>(enemyShips, "enemyShips.json");
             
@@ -207,7 +184,6 @@ namespace Project
                         enemyCells[column, row] == CellState.ShotDestroyedRed)
                     {
                         MessageBox.Show("You've already shot this position! Try again...");
-                        btn1.Visibility = Visibility.Visible;
                         return;
                     }
                     shootResult = Shoot(new Position(column, row), MoveType.PlayerMove);
@@ -232,9 +208,11 @@ namespace Project
             //GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells);
 
 
-            EnemyAI = new AI(playerCells);
+            EnemyAI = new AI(playerCells, difficulty);
             playerCellsLeft = GameBoard.GetOccupiedCells(playerCells);
             enemyCellsLeft = GameBoard.GetOccupiedCells(enemyCells);
+            botX.Content = playerCellsLeft.ToString();
+            botY.Content = enemyCellsLeft.ToString();
             this.Show();
             if (currentMove == MoveType.EnemyMove)
             {
