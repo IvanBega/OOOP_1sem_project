@@ -11,8 +11,8 @@
             <ColumnDefinition Width="10*"></ColumnDefinition>
             <ColumnDefinition Width="7*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Width="300" Height="300"
-              VerticalAlignment="Center" x:Name="ArrangementGrid" HorizontalAlignment="Center" ShowGridLines="True">
+        <Grid Width="300" Height="300"
+              VerticalAlignment="Top" x:Name="ArrangementGrid" HorizontalAlignment="Center" ShowGridLines="True" Margin="0,53,0,0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition/>
@@ -50,7 +50,7 @@
                 </RowDefinition>
                 <RowDefinition Height="3*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Grid x:Name="MiniShipGrid" ShowGridLines="True" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" VerticalAlignment="Center" Width="200" Height="150">
+            <Grid x:Name="MiniShipGrid" ShowGridLines="True" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Left" VerticalAlignment="Top" Width="210" Height="90" Margin="60,90,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
                     <ColumnDefinition></ColumnDefinition>
@@ -77,23 +77,26 @@
                 <Button x:Name="ResetShipBtn" Grid.Column="1" Click="ResetShipBtn_Click"  Content="Reset" FontSize="14" Height="60" Width="60"/>
                 <Button x:Name="RandomizeShipBtn" Grid.Column="0" Click="RandomizeShipBtn_Click"  Content="Random" FontSize="14" Height="60" Width="60"/>
             </Grid>
-            <ComboBox x:Name="ComboBox" Width="100" Height="30" Grid.Column="1" Grid.Row="1">
+            <ComboBox x:Name="ComboBox" Grid.Column="0" Grid.Row="1" SelectedIndex="0" Margin="32,61,32,28" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                 <TextBlock>Horizontal</TextBlock>
                 <TextBlock>Vertical</TextBlock>
             </ComboBox>
         </Grid>
         <Label x:Name="lblHorizontal" Content="  1      2      3      4      5      6      7      8      9    10"
-        	HorizontalAlignment="Left" Margin="81,41,0,359" Width="304" FontSize="14"/>
-        <TextBlock Text="1" FontSize="14" Margin="52,77,330,328"></TextBlock>
-        <TextBlock Text="2" FontSize="14" Margin="52,107,330,298"></TextBlock>
-        <TextBlock Text="3" FontSize="14" Margin="52,137,330,268"></TextBlock>
-        <TextBlock Text="4" FontSize="14" Margin="52,167,330,238"></TextBlock>
-        <TextBlock Text="5" FontSize="14" Margin="52,197,330,208"></TextBlock>
-        <TextBlock Text="6" FontSize="14" Margin="52,227,330,178"></TextBlock>
-        <TextBlock Text="7" FontSize="14" Margin="52,257,330,148"></TextBlock>
-        <TextBlock Text="8" FontSize="14" Margin="52,287,330,118"></TextBlock>
-        <TextBlock Text="9" FontSize="14" Margin="52,317,330,88"></TextBlock>
-        <TextBlock Text="10" FontSize="14" Margin="52,347,330,58"></TextBlock>
+        	HorizontalAlignment="Left" Margin="81,19,0,381" Width="304" FontSize="14"/>
+        <Label x:Name="nextShiplbl" Content="Your next ship to place" Grid.Column="1" FontSize="26" HorizontalAlignment="Center" Margin="0,0,0,381"></Label>
+        <Label x:Name="orientationlbl" Content="Pick orientation" Grid.Column="1" FontSize="26" Margin="0,201,135,192"></Label>
+        <TextBlock Text="1" FontSize="14" Margin="52,55,330,350"></TextBlock>
+        <TextBlock Text="2" FontSize="14" Margin="52,85,330,320"></TextBlock>
+        <TextBlock Text="3" FontSize="14" Margin="52,115,330,290"></TextBlock>
+        <TextBlock Text="4" FontSize="14" Margin="52,145,330,260"></TextBlock>
+        <TextBlock Text="5" FontSize="14" Margin="52,175,330,230"></TextBlock>
+        <TextBlock Text="6" FontSize="14" Margin="52,205,330,200"></TextBlock>
+        <TextBlock Text="7" FontSize="14" Margin="52,235,330,170"></TextBlock>
+        <TextBlock Text="8" FontSize="14" Margin="52,265,330,140"></TextBlock>
+        <TextBlock Text="9" FontSize="14" Margin="52,295,330,110"></TextBlock>
+        <TextBlock Text="10" FontSize="14" Margin="52,325,330,80"></TextBlock>
+        <Button x:Name="BackBtn"  Click="BackBtn_Click" Margin="52,375,278,34" Content="Back" FontSize="20" />
     </Grid>
 
 </Window>

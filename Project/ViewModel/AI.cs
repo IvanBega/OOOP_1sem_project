@@ -2,13 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Project.ViewModel
 {
     public class AI
-    {     
+    {
         private enum Compass
         {
             North,
@@ -72,7 +70,7 @@ namespace Project.ViewModel
         }
         public void AddAdjacentToQueue(Position position)
         {
-            List <Position> list = GetFreeAdjacentPos(position.X, position.Y);
+            List<Position> list = GetFreeAdjacentPos(position.X, position.Y);
             foreach (var pos in list)
             {
                 posToCheck.Enqueue(pos);
@@ -80,7 +78,7 @@ namespace Project.ViewModel
         }
         private bool ShotCell(int x, int y)
         {
-            return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotDestroyed || cells[x,y] == CellState.ShotDestroyedRed;
+            return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotDestroyed || cells[x, y] == CellState.ShotDestroyedRed;
         }
         private Compass GetRandomCompass()
         {
@@ -202,7 +200,7 @@ namespace Project.ViewModel
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    if (cells[i,j] == CellState.Occupied)
+                    if (cells[i, j] == CellState.Occupied)
                     {
                         return new Position(i, j);
                     }

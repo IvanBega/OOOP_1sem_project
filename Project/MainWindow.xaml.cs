@@ -1,25 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Serialization;
-using Project.Model;
+﻿using Project.Model;
 using Project.Model.Ships;
 using Project.View;
 using Project.ViewModel;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Shapes;
 
 namespace Project
 {
@@ -28,20 +19,22 @@ namespace Project
     /// </summary>
     public partial class MainWindow : Window
     {
-        public int[] shipCount { get; set; }
-        public List<Ship> playerShips { get; set; } = new();
-        public List<Ship> enemyShips { get; set; }
-        public CellState[,] playerCells { get; set; } = new CellState[10, 10];
-        public CellState[,] enemyCells { get; set; } = new CellState[10, 10];
+        public int[] ShipCount { get; set; }
+        public List<Ship> PlayerShips { get; set; } = new();
+        public List<Ship> EnemyShips { get; set; }
+        public CellState[,] PlayerCells { get; set; } = new CellState[10, 10];
+        public CellState[,] EnemyCells { get; set; } = new CellState[10, 10];
         public Settings settings;
-        private MenuWindow menu;
+        public ShipArrangement shipArrangement;
+        public MenuWindow menu;
         private MoveType currentMove = MoveType.PlayerMove;
         private AI EnemyAI;
         public double difficulty;
-        private Point enemyGridPos = new Point(420,40);
+        private Point enemyGridPos = new(420, 40);
         private int playerCellsLeft;
         private int enemyCellsLeft;
         private bool gameActive = false;
+        public bool ShipArrangementInitialized = false;
         public MainWindow()
         {
             InitializeComponent();
@@ -54,30 +47,30 @@ namespace Project
         }
         public void InitGameBoard()
         {
-            GameBoard.InitGrid(PlayerGrid, playerShips, playerCells, Brushes.Black);
-            GameBoard.InitGrid(EnemyGrid, enemyShips, enemyCells, Brushes.Transparent);
-            EnemyAI = new(playerCells, difficulty);
+            GameBoard.InitGrid(PlayerGrid, PlayerShips, PlayerCells, Brushes.Black);
+            GameBoard.InitGrid(EnemyGrid, EnemyShips, EnemyCells, Brushes.Transparent);
+            EnemyAI = new(PlayerCells, difficulty);
 
-            playerCellsLeft = GameBoard.GetOccupiedCells(playerCells);
-            enemyCellsLeft = playerCellsLeft;
+            playerCellsLeft = GameBoard.GetOccupiedCells(PlayerCells);
+            enemyCellsLeft = GameBoard.GetOccupiedCells(EnemyCells);
             botX.Content = playerCellsLeft.ToString();
             botY.Content = enemyCellsLeft.ToString();
             gameActive = true;
         }
-        public bool Shoot(Position pos, MoveType moveType) 
+        public bool Shoot(Position pos, MoveType moveType)
         {
             SoundEffect.PlayShootSound();
-            CellState[,] opponentCellState = playerCells;
-            List<Ship> opponentShips = playerShips;
+            CellState[,] opponentCellState = PlayerCells;
+            List<Ship> opponentShips = PlayerShips;
             Grid opponentGrid = PlayerGrid;
             if (moveType == MoveType.PlayerMove)
             {
-                opponentCellState = enemyCells;
-                opponentShips = enemyShips;
+                opponentCellState = EnemyCells;
+                opponentShips = EnemyShips;
                 opponentGrid = EnemyGrid;
             }
 
-            if (opponentCellState[pos.X,pos.Y] == CellState.Free)
+            if (opponentCellState[pos.X, pos.Y] == CellState.Free)
             {
                 Rectangle rect = new()
                 {
@@ -88,10 +81,10 @@ namespace Project
                 Grid.SetColumn(rect, pos.X);
                 Grid.SetRow(rect, pos.Y);
                 opponentGrid.Children.Add(rect);
-                opponentCellState[pos.X,pos.Y] = CellState.ShotMissed;
+                opponentCellState[pos.X, pos.Y] = CellState.ShotMissed;
             }
 
-            if (opponentCellState[pos.X,pos.Y] == CellState.Occupied)
+            if (opponentCellState[pos.X, pos.Y] == CellState.Occupied)
             {
                 Ship damagedShip = GameBoard.GetShipByPos(opponentShips, pos.X, pos.Y);
                 damagedShip.DamageCount += 1;
@@ -134,25 +127,26 @@ namespace Project
             }
             return false;
         }
-        private bool ShotCell(CellState[,] cells, int x, int y)
-        {
-            return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotMissed;
-        }
+        //private bool ShotCell(CellState[,] cells, int x, int y)
+        //{
+        //    return cells[x, y] == CellState.ShotMissed || cells[x, y] == CellState.ShotMissed;
+        //}
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             settings.Close();
+            menu.Close();
             if (gameActive)
             {
-                Serializer.SaveAsJsonFormat<List<Ship>>(playerShips, "playerShips.json");
-                Serializer.SaveAsJsonFormat<List<Ship>>(enemyShips, "enemyShips.json");
-                Serializer.SaveAsJsonFormat<CellState[,]>(playerCells, "playerCells.json");
-                Serializer.SaveAsJsonFormat<CellState[,]>(enemyCells, "enemyCells.json");
+                Serializer.SaveAsJsonFormat<List<Ship>>(PlayerShips, "playerShips.json");
+                Serializer.SaveAsJsonFormat<List<Ship>>(EnemyShips, "enemyShips.json");
+                Serializer.SaveAsJsonFormat<CellState[,]>(PlayerCells, "playerCells.json");
+                Serializer.SaveAsJsonFormat<CellState[,]>(EnemyCells, "enemyCells.json");
                 Serializer.SaveAsJsonFormat<MoveType>(currentMove, "currentMove.json");
                 Serializer.SaveAsJsonFormat<double>(difficulty, "difficulty.json");
             }
             //Serializer.SaveAsJsonFormat<List<Ship>>(playerShips, "playerShips.json");
             //Serializer.SaveAdList<Ship>(enemyShips, "enemyShips.json");
-            
+
         }
         private async void EnemyAttack()
         {
@@ -178,14 +172,13 @@ namespace Project
             if (currentMove == MoveType.PlayerMove)
             {
                 Point pos = e.GetPosition(this);
-                int row, column;
                 bool shootResult;
                 if (pos.X > enemyGridPos.X && pos.X < enemyGridPos.X + 300 && pos.Y > enemyGridPos.Y && pos.Y < enemyGridPos.Y + 300)
                 {
-                    GameBoard.GetPosByClick(enemyGridPos, pos, out row, out column);
+                    GameBoard.GetPosByClick(enemyGridPos, pos, out int row, out int column);
 
-                    if (enemyCells[column, row] == CellState.ShotMissed || enemyCells[column, row] == CellState.ShotDestroyed ||
-                        enemyCells[column, row] == CellState.ShotDestroyedRed)
+                    if (EnemyCells[column, row] == CellState.ShotMissed || EnemyCells[column, row] == CellState.ShotDestroyed ||
+                        EnemyCells[column, row] == CellState.ShotDestroyedRed)
                     {
                         MessageBox.Show("You've already shot this position! Try again...");
                         return;
@@ -202,24 +195,24 @@ namespace Project
         public void RestoreGameState()
         {
             gameActive = true;
-            playerCells = Serializer.ReadAsJsonFormat<CellState[,]>("playerCells.json");
-            enemyCells = Serializer.ReadAsJsonFormat<CellState[,]>("enemyCells.json");
-            playerShips = Serializer.ReadAsJsonFormat<List<Ship>>("playerShips.json");
-            enemyShips = Serializer.ReadAsJsonFormat<List<Ship>>("enemyShips.json");
+            PlayerCells = Serializer.ReadAsJsonFormat<CellState[,]>("playerCells.json");
+            EnemyCells = Serializer.ReadAsJsonFormat<CellState[,]>("enemyCells.json");
+            PlayerShips = Serializer.ReadAsJsonFormat<List<Ship>>("playerShips.json");
+            EnemyShips = Serializer.ReadAsJsonFormat<List<Ship>>("enemyShips.json");
             currentMove = Serializer.ReadAsJsonFormat<MoveType>("currentMove.json");
-            GameBoard.DrawCellsOnGrid(PlayerGrid, playerCells, true);
-            GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells, false);
-            foreach(Ship s in playerShips)
+            GameBoard.DrawCellsOnGrid(PlayerGrid, PlayerCells, true);
+            GameBoard.DrawCellsOnGrid(EnemyGrid, EnemyCells, false);
+            foreach (Ship s in PlayerShips)
             {
-                GameBoard.DrawShipBorders(s, PlayerGrid, Brushes.White, playerCells);
+                GameBoard.DrawShipBorders(s, PlayerGrid, Brushes.White, PlayerCells);
             }
-            foreach(Ship s in enemyShips)
+            foreach (Ship s in EnemyShips)
             {
-                GameBoard.DrawShipBorders(s, EnemyGrid, Brushes.White, enemyCells);
+                GameBoard.DrawShipBorders(s, EnemyGrid, Brushes.White, EnemyCells);
             }
-            EnemyAI = new AI(playerCells, difficulty);
-            playerCellsLeft = GameBoard.GetOccupiedCells(playerCells);
-            enemyCellsLeft = GameBoard.GetOccupiedCells(enemyCells);
+            EnemyAI = new AI(PlayerCells, difficulty);
+            playerCellsLeft = GameBoard.GetOccupiedCells(PlayerCells);
+            enemyCellsLeft = GameBoard.GetOccupiedCells(EnemyCells);
             botX.Content = playerCellsLeft.ToString();
             botY.Content = enemyCellsLeft.ToString();
             this.Show();
@@ -231,10 +224,10 @@ namespace Project
         private void GameOver()
         {
             DeleteAllFiles();
-            GameBoard.DrawCellsOnGrid(EnemyGrid, enemyCells, true);
-            foreach(Ship s in enemyShips)
+            GameBoard.DrawCellsOnGrid(EnemyGrid, EnemyCells, true);
+            foreach (Ship s in EnemyShips)
             {
-                GameBoard.DrawShipBorders(s, EnemyGrid, Brushes.White, enemyCells);
+                GameBoard.DrawShipBorders(s, EnemyGrid, Brushes.White, EnemyCells);
             }
             if (currentMove == MoveType.PlayerMove)
             {
@@ -244,7 +237,7 @@ namespace Project
             {
                 MessageBox.Show("Oh no! It looks like you have lost...");
             }
-            
+
         }
         private void DeleteAllFiles()
         {

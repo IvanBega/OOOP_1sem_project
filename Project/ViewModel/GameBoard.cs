@@ -1,11 +1,6 @@
 ﻿using Project.Model;
 using Project.Model.Ships;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -65,7 +60,7 @@ namespace Project.ViewModel
                     if (cells[ship.Position.X, j] == CellState.ShotDestroyed)
                         continue;
                     Border b = new();
-                    b.BorderThickness = new Thickness {Left = 5, Right = 5 };
+                    b.BorderThickness = new Thickness { Left = 5, Right = 5 };
                     b.BorderBrush = fill;
                     Grid.SetColumn(b, ship.Position.X);
                     Grid.SetRow(b, j);
@@ -103,10 +98,10 @@ namespace Project.ViewModel
                         Height = 30,
                         Width = 30,
                         Fill = fill
-                    };                 
+                    };
                     Grid.SetColumn(rect, i);
                     Grid.SetRow(rect, ship.Position.Y);
-                    grid.Children.Add(rect);           
+                    grid.Children.Add(rect);
                     cells[i, ship.Position.Y] = cellState;
                 }
             }
@@ -182,7 +177,7 @@ namespace Project.ViewModel
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    switch(cells[i,j])
+                    switch (cells[i, j])
                     {
                         case CellState.ShotMissed:
                             Rectangle rect1 = new()
@@ -241,7 +236,7 @@ namespace Project.ViewModel
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    if (cells[i,j] == CellState.Occupied)
+                    if (cells[i, j] == CellState.Occupied)
                     {
                         count++;
                     }

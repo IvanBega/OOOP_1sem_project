@@ -1,18 +1,13 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Serialization;
 namespace Project.Model
 {
     public static class Serializer
     {
         public static void SaveAsJsonFormat<T>(T list, string fileName)
         {
-            using  (StreamWriter sw = File.CreateText(fileName))
+            using (StreamWriter sw = File.CreateText(fileName))
             {
                 Newtonsoft.Json.JsonSerializer serializer = new Newtonsoft.Json.JsonSerializer();
                 serializer.Converters.Add(new Newtonsoft.Json.Converters.JavaScriptDateTimeConverter());

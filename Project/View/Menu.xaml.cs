@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace Project.View
 {
@@ -20,11 +8,12 @@ namespace Project.View
     /// </summary>
     public partial class MenuWindow : Window
     {
-        private MainWindow wnd = (MainWindow)Application.Current.MainWindow;
+        private readonly MainWindow wnd = (MainWindow)Application.Current.MainWindow;
+        private bool shipArraInitialized = false;
         public MenuWindow()
         {
             InitializeComponent();
-            if (File.Exists("playerCells.json") && File.Exists("enemyCells.json") && File.Exists("currentMove.json") 
+            if (File.Exists("playerCells.json") && File.Exists("enemyCells.json") && File.Exists("currentMove.json")
                 && File.Exists("playerShips.json") && File.Exists("enemyShips.json"))
             {
                 ContinueBtn.IsEnabled = true;
@@ -33,10 +22,14 @@ namespace Project.View
 
         private void NewGameBtn_Click(object sender, RoutedEventArgs e)
         {
-            ShipArrangement sa = new();
-            sa.Show();
-            sa.SetShipCount();
-            Close();
+            if (!shipArraInitialized)
+            {
+                wnd.shipArrangement = new();
+                shipArraInitialized = true;
+            }
+            wnd.shipArrangement.SetShipCount();
+            wnd.shipArrangement.Show();
+            Hide();
         }
 
         private void SettingsBtn_Click(object sender, RoutedEventArgs e)
@@ -48,6 +41,8 @@ namespace Project.View
         {
             Close();
             wnd.Close();
+            if (wnd.shipArrangement != null)
+                wnd.shipArrangement.Close();
         }
 
         private void ContinueBtn_Click(object sender, RoutedEventArgs e)

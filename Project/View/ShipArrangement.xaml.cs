@@ -3,16 +3,10 @@ using Project.Model.Ships;
 using Project.ViewModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
 namespace Project.View
@@ -22,42 +16,43 @@ namespace Project.View
     /// </summary>
     public partial class ShipArrangement : Window
     {
-        public int[] shipCount { get; set; }
-        private int[] shipCountCopy = new int[5];
+        public int[] ShipCount { get; set; }
+        private readonly int[] shipCountCopy = new int[5];
         private int index = 0;
-        private MainWindow wnd = (MainWindow)Application.Current.MainWindow;
-        private CellState[,] playerCells = new CellState[10,10];
-        private Point gridPos = new(80,60);
+        private readonly MainWindow wnd = (MainWindow)Application.Current.MainWindow;
+        private readonly CellState[,] playerCells = new CellState[10, 10];
+        private Point gridPos = new(80, 60);
         public ShipArrangement()
         {
             InitializeComponent();
-            shipCount = wnd.shipCount;
+            ShipCount = wnd.ShipCount;
         }
         public void SetShipCount()
         {
-            if (shipCount == null || shipCount.Length == 0)
+            index = 0;
+            if (ShipCount == null || ShipCount.Length == 0)
             {
                 //shipCount = new int[5] { 1, 0, 0, 0, 0 };
             }
-            wnd.enemyShips = RandomSetup();
-            Array.Copy(shipCount, shipCountCopy, 5);
-            while (shipCount[index] == 0)
+            wnd.EnemyShips = RandomSetup();
+            Array.Copy(ShipCount, shipCountCopy, 5);
+            while (ShipCount[index] == 0)
             {
                 index++;
             }
-            drawMiniShip(index + 1);
+            DrawMiniShip(index + 1);
         }
         private List<Ship> RandomSetup()
         {
             int size, index_i, index_j;
-            Direction direction = Direction.Horizontal;
+            Direction direction;
             CellState[,] cells = new CellState[10, 10];
-            Random r = new Random();
+            Random r = new();
             List<Ship> ships = new();
             bool flag = true;
             for (int k = 0; k < 5; k++)
             {
-                for (int l = 0; l < shipCount[k]; l++)
+                for (int l = 0; l < ShipCount[k]; l++)
                 {
                     flag = true;
                     size = k + 1;
@@ -87,7 +82,7 @@ namespace Project.View
                                     break;
                                 }
                             }
-                            
+
                         }
                         for (int j = 0; j < size; j++)
                         {
@@ -125,32 +120,48 @@ namespace Project.View
         }
         private Ship InitShipBySize(int size, Position pos, Direction direction)
         {
-            switch (size)
+            return size switch
             {
-                case 1:
-                    return new PatrolBoat(pos, direction);
-                case 2:
-                    return new Destroyer(pos, direction);
-                case 3:
-                    return new Submarine(pos, direction);
-                case 4:
-                    return new Battleship(pos, direction);
-                case 5:
-                    return new Carrier(pos, direction);
-                default:
-                    throw new ArgumentOutOfRangeException(String.Format("Failed to initialize ship with size {0}", size));
-            }
+                1 => new PatrolBoat(pos, direction),
+                2 => new Destroyer(pos, direction),
+                3 => new Submarine(pos, direction),
+                4 => new Battleship(pos, direction),
+                5 => new Carrier(pos, direction),
+                _ => throw new ArgumentOutOfRangeException(String.Format("Failed to initialize ship with size {0}", size)),
+            };
         }
-        private void drawMiniShip(int length)
+        private void DrawMiniShip(int length)
         {
             MiniShipGrid.Children.Clear();
             for (int i = 0; i < length; i++)
             {
-                Rectangle rect = new Rectangle { Fill = Brushes.Black };
+                Rectangle rect = new() { Fill = Brushes.Black };
                 Grid.SetColumn(rect, i + 1);
                 Grid.SetRow(rect, 1);
                 MiniShipGrid.Children.Add(rect);
             }
+            for (int i = 1; i < length + 1; i++)
+            {
+                Border b = new();
+                b.BorderThickness = new Thickness { Bottom = 5, Top = 5, Left = 0, Right = 0 };
+                b.BorderBrush = Brushes.White;
+                Grid.SetColumn(b, i);
+                Grid.SetRow(b, 1);
+                MiniShipGrid.Children.Add(b);
+            }
+            Border right = new();
+            right.BorderThickness = new Thickness { Right = 5 };
+            right.BorderBrush = Brushes.White;
+            Grid.SetRow(right, 1);
+            Grid.SetColumn(right, length);
+            MiniShipGrid.Children.Add(right);
+
+            Border left = new();
+            left.BorderThickness = new Thickness { Left = 5 };
+            left.BorderBrush = Brushes.White;
+            Grid.SetRow(left, 1);
+            Grid.SetColumn(left, 1);
+            MiniShipGrid.Children.Add(left);
         }
         private void PlaceShip(int x, int y)
         {
@@ -167,20 +178,20 @@ namespace Project.View
                 MessageBox.Show("Can't place ship here!");
                 return;
             }
-            if (index < 5 && shipCount[index] > 0)
+            if (index < 5 && ShipCount[index] > 0)
             {
                 ship = InitShipBySize(index + 1, position, direction);
-                wnd.playerShips.Add(ship);
+                wnd.PlayerShips.Add(ship);
                 GameBoard.DrawShip(ship, ArrangementGrid, playerCells, Brushes.Black, CellState.Occupied);
                 GameBoard.DrawShipBorders(ship, ArrangementGrid, Brushes.White, playerCells);
-                shipCount[index]--;
-                while (index < 5 && shipCount[index] == 0)
+                ShipCount[index]--;
+                while (index < 5 && ShipCount[index] == 0)
                 {
                     index++;
                 }
                 if (index < 5)
                 {
-                    drawMiniShip(index + 1);
+                    DrawMiniShip(index + 1);
                 }
             }
             if (index == 5)
@@ -197,33 +208,20 @@ namespace Project.View
         }
         private void ResetShipBtn_Click(object sender, RoutedEventArgs e)
         {
-            ResetPlayerCells();
-            index = 0;
-            MiniShipGrid.Children.Clear();
-            Array.Copy(shipCountCopy, shipCount, 5);
-            Array.Clear(playerCells, 0, playerCells.Length);
-            ProceedBtn.Visibility = Visibility.Hidden;
-            wnd.playerShips.Clear();
-            ArrangementGrid.Children.Clear();
+            ResetArrangement();
 
-            while (shipCount[index] == 0)
-            {
-                index++;
-            }
-            drawMiniShip(index + 1);
-            
         }
         private void RandomizeShipBtn_Click(object sender, RoutedEventArgs e)
         {
             ResetPlayerCells();
             index = 5;
             ArrangementGrid.Children.Clear();
-            Array.Copy(shipCountCopy, shipCount, 5);
+            Array.Copy(shipCountCopy, ShipCount, 5);
             Array.Clear(playerCells, 0, playerCells.Length);
             MiniShipGrid.Children.Clear();
-            wnd.playerShips.Clear();
-            wnd.playerShips = RandomSetup();
-            GameBoard.InitGrid(ArrangementGrid, wnd.playerShips, playerCells, Brushes.Black);
+            wnd.PlayerShips.Clear();
+            wnd.PlayerShips = RandomSetup();
+            GameBoard.InitGrid(ArrangementGrid, wnd.PlayerShips, playerCells, Brushes.Black);
 
             ProceedBtn.Visibility = Visibility.Visible;
         }
@@ -235,11 +233,11 @@ namespace Project.View
             {
                 GetPosByClick(pos, out row, out column);
                 PlaceShip(column, row);
-            }         
+            }
         }
         private void GetPosByClick(Point p, out int row, out int column)
         {
-            row = (int) (p.Y - gridPos.Y) / 30;
+            row = (int)(p.Y - gridPos.Y) / 30;
             column = (int)(p.X - gridPos.X) / 30;
         }
         private void ResetPlayerCells()
@@ -251,6 +249,29 @@ namespace Project.View
                     playerCells[i, j] = CellState.Free;
                 }
             }
+        }
+        private void BackBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ResetArrangement();
+            Hide();
+            wnd.menu.Show();
+        }
+        private void ResetArrangement()
+        {
+            ResetPlayerCells();
+            index = 0;
+            MiniShipGrid.Children.Clear();
+            Array.Copy(shipCountCopy, ShipCount, 5);
+            Array.Clear(playerCells, 0, playerCells.Length);
+            ProceedBtn.Visibility = Visibility.Hidden;
+            wnd.PlayerShips.Clear();
+            ArrangementGrid.Children.Clear();
+
+            while (ShipCount[index] == 0)
+            {
+                index++;
+            }
+            DrawMiniShip(index + 1);
         }
     }
 }
